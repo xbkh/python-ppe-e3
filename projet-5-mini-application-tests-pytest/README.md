@@ -1,226 +1,226 @@
-# Projet 5 — Mini-application testée avec pytest
+# Project 5 — Mini application tested with pytest
 
-**Rendu PPE — Cours *Python — Principes de base* (classe E3).**
-Réalisé le **30 octobre 2026**. Niveau : avancé.
+**PPE deliverable — Course *Python — Fundamentals* (class E3).**
+Completed on **30 October 2026**. Level: advanced.
 
-Une **mini-banque** en Python (comptes courants et épargne, virements, intérêts, relevés)
-livrée avec sa **suite de tests pytest** : 165 tests, couverture de **100 % des lignes et des
-branches**, et un test de mutation qui prouve que ces tests détectent vraiment les bugs.
+A **mini bank** in Python (current and savings accounts, transfers, interest, statements)
+delivered with its **pytest test suite**: 165 tests, **100% line and
+branch** coverage, and a mutation test that proves these tests really catch bugs.
 
-## Sommaire
+## Contents
 
-- [Avancement](#avancement)
-- [Démarrage rapide](#démarrage-rapide)
-- [Structure du dépôt](#structure-du-dépôt)
-- [Le cas métier](#le-cas-métier)
-- [Stratégie de test](#stratégie-de-test)
-- [Captures d'écran](#captures-décran)
-- [Rapport d'exécution et couverture](#rapport-dexécution-et-couverture)
-- [Difficultés et décisions](#difficultés-et-décisions)
-- [Limites](#limites)
-- [Correspondance avec la fiche du projet](#correspondance-avec-la-fiche-du-projet)
+- [Progress](#progress)
+- [Quick start](#quick-start)
+- [Repository structure](#repository-structure)
+- [The business case](#the-business-case)
+- [Test strategy](#test-strategy)
+- [Screenshots](#screenshots)
+- [Execution report and coverage](#execution-report-and-coverage)
+- [Difficulties and decisions](#difficulties-and-decisions)
+- [Limitations](#limitations)
+- [Mapping to the project brief](#mapping-to-the-project-brief)
 - [Sources](#sources)
 
-## Avancement
+## Progress
 
-| Étape de la fiche | État |
+| Brief step | Status |
 | --- | --- |
-| 1. Définir le cas métier | Terminé : mini-banque, voir [`CAS-METIER.md`](./CAS-METIER.md) (15 règles) |
-| 2. Concevoir le module en isolant la logique des entrées/sorties | Terminé : seul `__main__.py` affiche ; l'heure est injectée |
-| 3. Tests pytest des cas nominaux | Terminé |
-| 4. Tests pytest des cas limites et des erreurs attendues | Terminé |
-| 5. Exécuter la suite et documenter le taux de réussite et la couverture | Terminé : 165/165, 100 % lignes et branches, [`rapport/`](./rapport/) |
-| Livrable : code source du module | [`banque/`](./banque/) |
-| Livrable : suite de tests pytest | [`tests/`](./tests/) |
-| Livrable : rapport d'exécution (capture ou export) | [`rapport/`](./rapport/) (4 exports) et captures 2 à 5 |
+| 1. Define the business case | Done: mini bank, see [`CAS-METIER.md`](./CAS-METIER.md) (15 rules) |
+| 2. Design the module, isolating the logic from input/output | Done: only `__main__.py` prints; the time is injected |
+| 3. pytest tests of the nominal cases | Done |
+| 4. pytest tests of edge cases and expected errors | Done |
+| 5. Run the suite and document the pass rate and coverage | Done: 165/165, 100% lines and branches, [`rapport/`](./rapport/) |
+| Deliverable: module source code | [`banque/`](./banque/) |
+| Deliverable: pytest test suite | [`tests/`](./tests/) |
+| Deliverable: execution report (screenshot or export) | [`rapport/`](./rapport/) (4 exports) and screenshots 2 to 5 |
 
-## Démarrage rapide
+## Quick start
 
-Prérequis : Python 3.8 ou plus récent (testé avec Python 3.12.3 sous Linux). Le module
-`banque` n'a aucune dépendance ; `pytest` et `pytest-cov` ne servent qu'aux tests.
+Prerequisites: Python 3.8 or newer (tested with Python 3.12.3 on Linux). The
+`banque` module has no dependencies; `pytest` and `pytest-cov` are only used for the tests.
 
 ```bash
-git clone https://github.com/bilkl/python-ppe-e3.git
+git clone https://github.com/xbkh/python-ppe-e3.git
 cd python-ppe-e3/projet-5-mini-application-tests-pytest
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt
 
-python3 -m banque                                   # démonstration
-pytest                                              # les 165 tests
-pytest --cov --cov-report=term-missing              # avec la couverture
-python3 tools/mutation.py                           # test de mutation
-tools/rapport.sh                                    # régénère rapport/
+python3 -m banque                                   # demo
+pytest                                              # the 165 tests
+pytest --cov --cov-report=term-missing              # with coverage
+python3 tools/mutation.py                           # mutation testing
+tools/rapport.sh                                    # regenerates rapport/
 ```
 
-## Structure du dépôt
+## Repository structure
 
 ```text
 .
 ├── banque/
-│   ├── montants.py    # validation des montants (Decimal, 2 décimales, pas de float)
+│   ├── montants.py    # amount validation (Decimal, 2 decimals, no float)
 │   ├── compte.py      # CompteBancaire, CompteEpargne, Operation
-│   ├── banque.py      # Banque : ouverture, recherche, virements tout-ou-rien
-│   ├── erreurs.py     # exceptions métier
-│   ├── releve.py      # relevé en texte (renvoie une chaîne)
-│   └── __main__.py    # démonstration (seul module qui affiche)
+│   ├── banque.py      # Banque: opening, lookup, all-or-nothing transfers
+│   ├── erreurs.py     # business exceptions
+│   ├── releve.py      # text statement (returns a string)
+│   └── __main__.py    # demo (the only module that prints)
 ├── tests/
-│   ├── conftest.py        # fixtures partagées, horloge fixe
-│   ├── test_montants.py   # 49 cas
-│   ├── test_compte.py     # 49 cas
-│   ├── test_epargne.py    # 28 cas
-│   ├── test_banque.py     # 29 cas
-│   └── test_releve.py     # 10 cas
-├── rapport/               # rapport d'exécution (pytest, JUnit, couverture, mutation)
+│   ├── conftest.py        # shared fixtures, fixed clock
+│   ├── test_montants.py   # 49 cases
+│   ├── test_compte.py     # 49 cases
+│   ├── test_epargne.py    # 28 cases
+│   ├── test_banque.py     # 29 cases
+│   └── test_releve.py     # 10 cases
+├── rapport/               # execution report (pytest, JUnit, coverage, mutation)
 ├── tools/
-│   ├── mutation.py        # test de mutation artisanal (23 bugs)
-│   ├── rapport.sh         # génère rapport/
-│   └── capture.sh         # génère les captures d'écran
+│   ├── mutation.py        # home-made mutation testing (23 bugs)
+│   ├── rapport.sh         # generates rapport/
+│   └── capture.sh         # generates the screenshots
 ├── screenshots/
-├── CAS-METIER.md          # cas métier et règles R1 à R15
+├── CAS-METIER.md          # business case and rules R1 to R15
 ├── pytest.ini  .coveragerc  requirements.txt
 └── README.md
 ```
 
-## Le cas métier
+## The business case
 
-Une `Banque` ouvre des comptes et exécute des virements ; un compte courant a un découvert
-autorisé ; un compte épargne verse des intérêts mensuels. Les règles (R1 à R15) sont
-listées dans [`CAS-METIER.md`](./CAS-METIER.md), avec pour chacune le fichier de tests qui
-la vérifie. Une démonstration (`python3 -m banque`) est en [capture 1](#1-démonstration-de-lapplication).
+A `Banque` opens accounts and executes transfers; a current account has an authorised
+overdraft; a savings account pays monthly interest. The rules (R1 to R15) are
+listed in [`CAS-METIER.md`](./CAS-METIER.md), with, for each, the test file that
+verifies it. A demo (`python3 -m banque`) is shown in [screenshot 1](#1-application-demo).
 
-Un point de conception structure tout le reste : **l'argent est un `Decimal`**, jamais un
-`float`. `0.1 + 0.2` donne `0.30000000000000004` en binaire ; un montant `float` est donc
-refusé à l'entrée.
+One design point shapes everything else: **money is a `Decimal`**, never a
+`float`. `0.1 + 0.2` gives `0.30000000000000004` in binary; a `float` amount is therefore
+rejected on input.
 
-## Stratégie de test
+## Test strategy
 
-77 fonctions de test, 165 cas une fois les paramétrages développés (`@pytest.mark.parametrize`).
-Chaque fichier est organisé en deux parties : d'abord les **cas nominaux**, ensuite les
-**cas limites et erreurs**.
+77 test functions, 165 cases once the parametrisation is expanded (`@pytest.mark.parametrize`).
+Each file is organised in two parts: first the **nominal cases**, then the
+**edge cases and errors**.
 
-| Famille | Exemples |
+| Family | Examples |
 | --- | --- |
-| **Nominaux** | dépôt, retrait, virement, intérêts exacts, historique chronologique, relevé complet |
-| **Limites** (valeur exacte de la frontière, puis un centime au-delà) | retrait de `solde + découvert` accepté, `+ 0.01` refusé ; montant maximum accepté, `+ 0.01` refusé ; titulaire de 60 caractères accepté, 61 refusé ; taux de 10 % accepté, 10.1 % refusé ; plus petit montant : 0.01 |
-| **Arrondis** | intérêts de 12.875 → 12.88 (demi vers le haut) ; 12.87475 → 12.87 ; intérêts sous le demi-centime → rien n'est crédité |
-| **Erreurs attendues** | `FondsInsuffisants`, `MontantInvalide`, `CompteFerme`, `CompteInconnu`, `OperationInvalide`, toujours avec le message et le **solde inchangé** |
-| **Entrées hostiles** | `float`, `True`, `None`, `nan`, `inf`, `"1 000"`, `"12.5.3"`, `"€10"`, notation `1e2`, 3 décimales |
-| **Propriétés** | le total des dépôts est conservé par un virement ; le dernier solde de l'historique égale le solde ; une opération refusée ne laisse aucune trace |
-| **Atomicité** | un virement refusé ne modifie **aucun** des deux comptes ni leurs historiques |
+| **Nominal** | deposit, withdrawal, transfer, exact interest, chronological history, full statement |
+| **Edges** (exact boundary value, then one cent beyond) | withdrawal of `balance + overdraft` accepted, `+ 0.01` rejected; maximum amount accepted, `+ 0.01` rejected; 60-character holder accepted, 61 rejected; 10% rate accepted, 10.1% rejected; smallest amount: 0.01 |
+| **Rounding** | interest of 12.875 → 12.88 (half up); 12.87475 → 12.87; interest below half a cent → nothing is credited |
+| **Expected errors** | `FondsInsuffisants`, `MontantInvalide`, `CompteFerme`, `CompteInconnu`, `OperationInvalide`, always with the message and the **balance unchanged** |
+| **Hostile input** | `float`, `True`, `None`, `nan`, `inf`, `"1 000"`, `"12.5.3"`, `"€10"`, `1e2` notation, 3 decimals |
+| **Properties** | the total of deposits is preserved by a transfer; the last balance in the history equals the balance; a rejected operation leaves no trace |
+| **Atomicity** | a rejected transfer changes **neither** account nor their histories |
 
-Techniques pytest utilisées : fixtures (`conftest.py`), `@pytest.mark.parametrize` (y compris
-combiné, avec identifiants lisibles), `pytest.raises(..., match=...)`, horloge injectée pour
-des tests déterministes, `capsys` et `runpy` pour tester la démonstration.
+pytest techniques used: fixtures (`conftest.py`), `@pytest.mark.parametrize` (including
+combined, with readable IDs), `pytest.raises(..., match=...)`, injected clock for
+deterministic tests, `capsys` and `runpy` to test the demo.
 
-### Les tests testent-ils vraiment quelque chose ?
+### Do the tests really test anything?
 
-Une couverture de 100 % dit que chaque ligne **s'exécute** pendant les tests, pas que les
-tests **vérifient** le résultat. D'où [`tools/mutation.py`](./tools/mutation.py) : le script
-copie le code, y introduit un bug à la fois (un `>` devient `>=`, un signe est inversé, un
-contrôle est supprimé...), relance la suite, et exige qu'un test **échoue**. Un bug qui
-passe inaperçu (« survivant ») révèle un test manquant.
+100% coverage says every line **runs** during the tests, not that the
+tests **check** the result. Hence [`tools/mutation.py`](./tools/mutation.py): the script
+copies the code, introduces one bug at a time (a `>` becomes `>=`, a sign is flipped, a
+check is removed...), reruns the suite, and requires a test to **fail**. A bug that
+goes unnoticed (a "survivor") reveals a missing test.
 
-Résultat : **23 bugs introduits, 23 détectés.** La liste complète est dans
+Result: **23 bugs introduced, 23 caught.** The full list is in
 [`rapport/mutation.txt`](./rapport/mutation.txt).
 
-## Captures d'écran
+## Screenshots
 
-Commandes réellement tapées dans un terminal (écran virtuel Xvfb, `xterm`, `xdotool`,
-`scrot`) ; [`tools/capture.sh`](./tools/capture.sh) les régénère.
+Commands actually typed in a terminal (Xvfb virtual screen, `xterm`, `xdotool`,
+`scrot`); [`tools/capture.sh`](./tools/capture.sh) regenerates them.
 
-### 1. Démonstration de l'application
+### 1. Application demo
 
-![Démonstration](./screenshots/01-demonstration.png)
+![Demo](./screenshots/01-demonstration.png)
 
-Deux comptes d'Alice : virement de 300 du courant vers l'épargne, intérêts du mois
-(12.88 CHF), puis un retrait de 5 000 refusé.
+Two accounts of Alice: transfer of 300 from current to savings, interest for the month
+(12.88 CHF), then a withdrawal of 5,000 rejected.
 
-### 2. Les tests, un par ligne
+### 2. The tests, one per line
 
 ![pytest -v](./screenshots/02-pytest-verbose.png)
 
-Fin de la sortie de `pytest -v` : chaque cas paramétré est un test à part, 165 réussis.
+End of the `pytest -v` output: each parametrised case is a separate test, 165 passed.
 
-### 3. Couverture des lignes et des branches
+### 3. Line and branch coverage
 
-![Couverture](./screenshots/03-couverture.png)
+![Coverage](./screenshots/03-couverture.png)
 
-### 4. Un bug volontaire est détecté
+### 4. A deliberate bug is detected
 
-![Bug volontaire détecté](./screenshots/04-bug-volontaire-detecte.png)
+![Deliberate bug detected](./screenshots/04-bug-volontaire-detecte.png)
 
-Dans une **copie temporaire** du code, `if montant > self.disponible` devient `>=` (retrait
-de la totalité du disponible refusé à tort). La suite passe de 165 réussis à **9 échecs**,
-dont le test du découvert, de l'épargne et de la clôture.
+In a **temporary copy** of the code, `if montant > self.disponible` becomes `>=` (withdrawing
+the whole available amount wrongly rejected). The suite goes from 165 passed to **9 failures**,
+including the overdraft, savings and closing tests.
 
-### 5. Test de mutation
+### 5. Mutation testing
 
-![Test de mutation](./screenshots/05-test-de-mutation.png)
+![Mutation testing](./screenshots/05-test-de-mutation.png)
 
-## Rapport d'exécution et couverture
+## Execution report and coverage
 
-Détail dans [`rapport/`](./rapport/) : sortie `pytest -v`, `junit.xml`, couverture, mutation.
+Details in [`rapport/`](./rapport/): `pytest -v` output, `junit.xml`, coverage, mutation.
 
-| Mesure | Résultat |
+| Measure | Result |
 | --- | --- |
-| Tests réussis | **165 / 165** (0 échec, 0 ignoré) |
-| Durée | environ 0,2 s |
-| Couverture des lignes | **100 %** (217 instructions) |
-| Couverture des branches | **100 %** (46 branches) |
-| Mutations détectées | **23 / 23** |
+| Tests passed | **165 / 165** (0 failed, 0 skipped) |
+| Duration | about 0.2 s |
+| Line coverage | **100%** (217 statements) |
+| Branch coverage | **100%** (46 branches) |
+| Mutations caught | **23 / 23** |
 
-Le fichier `__main__.py` est inclus dans la couverture : la démonstration est elle-même
-testée.
+The `__main__.py` file is included in the coverage: the demo is itself
+tested.
 
-## Difficultés et décisions
+## Difficulties and decisions
 
-- **Imports sous pytest.** Premier lancement : `ModuleNotFoundError: No module named 'banque'`.
-  Corrigé par `pythonpath = .` dans `pytest.ini` et un `tests/__init__.py`.
-- **Configuration de la couverture ignorée.** J'avais d'abord placé les réglages de
-  `coverage` dans `pytest.ini`, où il ne les lit pas : le premier rapport comptait les
-  fichiers de test eux-mêmes (« 100 % » trompeur). Déplacés dans `.coveragerc`
-  (`source = banque`, `branch = True`), le rapport ne porte plus que sur le code de
-  l'application.
-- **Un test de mutation a trouvé du code redondant, pas un test manquant.** La première
-  exécution a laissé survivre 1 mutation sur 22 : le contrôle `isinstance(valeur, float)`
-  était **doublé** par le contrôle de type suivant, qui refusait déjà les `float` avec le
-  même message. Le bug introduit n'avait donc aucun effet observable. J'ai simplifié le code
-  (un seul contrôle de type) et réécrit la mutation pour viser ce contrôle, plus une mutation
-  sur les booléens.
-- **Code mort supprimé.** Ma première version du virement contenait un retour en arrière
-  (`try/except` qui annulait le débit si le crédit échouait). Après les contrôles préalables,
-  le crédit ne peut plus échouer : ce code ne pouvait jamais s'exécuter, donc jamais
-  être couvert ni testé. Supprimé, et l'ordre « tout vérifier puis agir » documenté.
-- **`float` refusés plutôt que convertis.** Convertir `0.1` en `Decimal(str(0.1))` aurait
-  masqué le problème. Les refuser force l'appelant à passer `"0.10"`.
-- **Heure injectée.** Sans cela, les horodatages changeraient à chaque test.
+- **Imports under pytest.** First run: `ModuleNotFoundError: No module named 'banque'`.
+  Fixed with `pythonpath = .` in `pytest.ini` and a `tests/__init__.py`.
+- **Coverage configuration ignored.** I had first put the `coverage` settings in
+  `pytest.ini`, where it does not read them: the first report counted the test
+  files themselves (a misleading "100%"). Moved to `.coveragerc`
+  (`source = banque`, `branch = True`), the report now only covers the
+  application code.
+- **A mutation test found redundant code, not a missing test.** The first
+  run let 1 mutation out of 22 survive: the `isinstance(valeur, float)` check
+  was **doubled** by the following type check, which already rejected `float`s with the
+  same message. The introduced bug therefore had no observable effect. I simplified the code
+  (a single type check) and rewrote the mutation to target that check, plus a mutation
+  on booleans.
+- **Dead code removed.** My first version of the transfer contained a rollback
+  (`try/except` that cancelled the debit if the credit failed). After the preliminary checks,
+  the credit can no longer fail: that code could never run, hence never
+  be covered or tested. Removed, and the "check everything, then act" order documented.
+- **`float`s rejected rather than converted.** Converting `0.1` to `Decimal(str(0.1))` would have
+  hidden the problem. Rejecting them forces the caller to pass `"0.10"`.
+- **Injected time.** Without it, timestamps would change on every test.
 
-## Limites
+## Limitations
 
-- **100 % de couverture ne prouve pas l'absence de bug.** Le test de mutation en réduit le
-  risque mais ses 23 mutations sont choisies à la main : elles ne sont pas exhaustives.
-  Une bibliothèque dédiée (par exemple `mutmut`) en génèrerait bien davantage.
-- **Tests et code écrits par la même personne** : les cas imaginés partagent les mêmes
-  angles morts. Une relecture croisée par un tiers serait utile.
-- **Pas de persistance** : la banque vit en mémoire. Les comptes ne survivent pas à la
-  fin du programme.
-- **Pas de concurrence** : l'application n'est pas conçue pour des accès simultanés.
-- **Une seule devise** (CHF), pas de frais, de plafond journalier ni de taux variable.
-- Le cas métier est un choix personnel, à valider avec le formateur comme le demande la fiche.
+- **100% coverage does not prove the absence of bugs.** Mutation testing reduces the
+  risk but its 23 mutations are chosen by hand: they are not exhaustive.
+  A dedicated library (for example `mutmut`) would generate many more.
+- **Tests and code written by the same person**: the imagined cases share the same
+  blind spots. A cross-review by a third party would be useful.
+- **No persistence**: the bank lives in memory. Accounts do not survive the end of the
+  program.
+- **No concurrency**: the application is not designed for simultaneous access.
+- **A single currency** (CHF), no fees, daily limit or variable rate.
+- The business case is a personal choice, to be validated with the instructor as the brief requires.
 
-## Correspondance avec la fiche du projet
+## Mapping to the project brief
 
-| Critère d'évaluation | Pondération | Où le trouver |
+| Evaluation criterion | Weight | Where to find it |
 | --- | --- | --- |
-| Conception du module | 25 % | [`banque/`](./banque/), [`CAS-METIER.md`](./CAS-METIER.md) |
-| Couverture des cas nominaux | 20 % | sections « cas nominaux » de chaque fichier de [`tests/`](./tests/), [stratégie](#stratégie-de-test) |
-| Couverture des cas limites et erreurs | 25 % | sections « cas limites et erreurs », test de mutation, captures 4 et 5 |
-| Qualité et clarté des tests | 15 % | noms explicites, fixtures, paramétrage, `match=` sur les messages, test de mutation |
-| Documentation | 15 % | ce README, [`CAS-METIER.md`](./CAS-METIER.md), [`rapport/`](./rapport/) |
+| Module design | 25% | [`banque/`](./banque/), [`CAS-METIER.md`](./CAS-METIER.md) |
+| Coverage of nominal cases | 20% | "nominal cases" sections of each file in [`tests/`](./tests/), [strategy](#test-strategy) |
+| Coverage of edge cases and errors | 25% | "edge cases and errors" sections, mutation testing, screenshots 4 and 5 |
+| Test quality and clarity | 15% | explicit names, fixtures, parametrisation, `match=` on messages, mutation testing |
+| Documentation | 15% | this README, [`CAS-METIER.md`](./CAS-METIER.md), [`rapport/`](./rapport/) |
 
 ## Sources
 
-- Fiche du projet : [Satom-IT-Learning-Solutions/E3 — Projet 5](https://github.com/Satom-IT-Learning-Solutions/E3/blob/main/02-python-principes-de-base/projet-5-mini-application-tests-pytest.md)
-- [pytest — documentation officielle](https://docs.pytest.org/en/stable/)
+- Project brief: [Satom-IT-Learning-Solutions/E3 — Project 5](https://github.com/Satom-IT-Learning-Solutions/E3/blob/main/02-python-principes-de-base/projet-5-mini-application-tests-pytest.md)
+- [pytest — official documentation](https://docs.pytest.org/en/stable/)
 - [pytest-cov](https://pytest-cov.readthedocs.io/)
-- [Python — Module decimal](https://docs.python.org/3/library/decimal.html)
+- [Python — decimal module](https://docs.python.org/3/library/decimal.html)

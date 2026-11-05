@@ -1,46 +1,46 @@
-# Projet 4 — Client d'une API publique en Python
+# Project 4 — Public API client in Python
 
-**Rendu PPE — Cours *Python — Principes de base* (classe E3).**
-Réalisé le **30 octobre 2026**. Niveau : intermédiaire / avancé.
+**PPE deliverable — Course *Python — Fundamentals* (class E3).**
+Completed on **30 October 2026**. Level: intermediate / advanced.
 
-Client en ligne de commande de l'**API publique Frankfurter** (taux de change de la Banque
-centrale européenne) : conversion de montants, taux du jour ou d'un jour passé, évolution
-d'un taux sur une période, liste des devises. Requêtes HTTP avec la bibliothèque `requests`,
-lecture de la réponse JSON, gestion soignée des erreurs réseau et des réponses invalides.
+Command-line client for the **Frankfurter public API** (European Central Bank
+exchange rates): amount conversion, rate of the day or of a past day, evolution
+of a rate over a period, list of currencies. HTTP requests with the `requests` library,
+JSON response parsing, careful handling of network errors and invalid responses.
 
-## Sommaire
+## Contents
 
-- [Avancement](#avancement)
-- [Démarrage rapide](#démarrage-rapide)
-- [Structure du dépôt](#structure-du-dépôt)
-- [Choix de l'API](#choix-de-lapi)
-- [Conception](#conception)
-- [Captures d'écran](#captures-décran)
-- [Tests et validation](#tests-et-validation)
-- [Difficultés et décisions](#difficultés-et-décisions)
-- [Correspondance avec la fiche du projet](#correspondance-avec-la-fiche-du-projet)
+- [Progress](#progress)
+- [Quick start](#quick-start)
+- [Repository structure](#repository-structure)
+- [Choice of the API](#choice-of-the-api)
+- [Design](#design)
+- [Screenshots](#screenshots)
+- [Tests and validation](#tests-and-validation)
+- [Difficulties and decisions](#difficulties-and-decisions)
+- [Mapping to the project brief](#mapping-to-the-project-brief)
 - [Sources](#sources)
 
-## Avancement
+## Progress
 
-| Étape de la fiche | État |
+| Brief step | Status |
 | --- | --- |
-| 1. Choisir une API publique gratuite adaptée | Terminé : Frankfurter, voir [Choix de l'API](#choix-de-lapi) |
-| 2. Requête GET avec `requests` | Terminé : [`api.py`](./client_taux/api.py) |
-| 3. Parser la réponse JSON et extraire les champs pertinents | Terminé, avec validation de chaque champ |
-| 4. Gérer les erreurs (API indisponible, clé manquante, données absentes) | Terminé : [`GESTION-ERREURS.md`](./GESTION-ERREURS.md) |
-| 5. Présenter les résultats de façon lisible en ligne de commande | Terminé : [`cli.py`](./client_taux/cli.py) |
-| Livrable : script client de l'API | [`client_taux/`](./client_taux/) |
-| Livrable : exemple de sortie pour au moins 3 requêtes différentes | 4 requêtes dans [`exemples/sortie-exemples.txt`](./exemples/sortie-exemples.txt) et captures 1 à 3 |
-| Livrable : note sur la gestion des erreurs | [`GESTION-ERREURS.md`](./GESTION-ERREURS.md) |
+| 1. Choose a suitable free public API | Done: Frankfurter, see [Choice of the API](#choice-of-the-api) |
+| 2. GET request with `requests` | Done: [`api.py`](./client_taux/api.py) |
+| 3. Parse the JSON response and extract the relevant fields | Done, with validation of every field |
+| 4. Handle errors (API unavailable, missing key, missing data) | Done: [`GESTION-ERREURS.md`](./GESTION-ERREURS.md) |
+| 5. Present the results readably on the command line | Done: [`cli.py`](./client_taux/cli.py) |
+| Deliverable: API client script | [`client_taux/`](./client_taux/) |
+| Deliverable: sample output for at least 3 different requests | 4 requests in [`exemples/sortie-exemples.txt`](./exemples/sortie-exemples.txt) and screenshots 1 to 3 |
+| Deliverable: note on error handling | [`GESTION-ERREURS.md`](./GESTION-ERREURS.md) |
 
-## Démarrage rapide
+## Quick start
 
-Prérequis : Python 3.8 ou plus récent, accès Internet, bibliothèque `requests`
-(testé avec Python 3.12.3 et `requests` 2.31.0 sous Linux).
+Prerequisites: Python 3.8 or newer, Internet access, `requests` library
+(tested with Python 3.12.3 and `requests` 2.31.0 on Linux).
 
 ```bash
-git clone https://github.com/bilkl/python-ppe-e3.git
+git clone https://github.com/xbkh/python-ppe-e3.git
 cd python-ppe-e3/projet-4-client-api-publique
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt
@@ -51,151 +51,151 @@ python3 -m client_taux historique CHF EUR --du 2026-10-01 --au 2026-10-28
 python3 -m client_taux devises --filtre dollar
 ```
 
-Détail des commandes : [`NOTICE.md`](./NOTICE.md). Tests (sans accès Internet) :
+Command details: [`NOTICE.md`](./NOTICE.md). Tests (no Internet access needed):
 
 ```bash
 python3 -m unittest -v
 ```
 
-## Structure du dépôt
+## Repository structure
 
 ```text
 .
 ├── client_taux/
-│   ├── __main__.py   # point d'entrée : python3 -m client_taux
-│   ├── api.py        # requêtes (requests), validations, erreurs, nouvelles tentatives
-│   └── cli.py        # commandes, mise en forme, codes de sortie
+│   ├── __main__.py   # entry point: python3 -m client_taux
+│   ├── api.py        # requests (requests), validations, errors, retries
+│   └── cli.py        # commands, formatting, exit codes
 ├── tests/
-│   ├── serveur_factice.py   # petit serveur HTTP local qui simule l'API
-│   └── test_client.py       # 24 tests automatisés (unittest)
+│   ├── serveur_factice.py   # small local HTTP server that simulates the API
+│   └── test_client.py       # 24 automated tests (unittest)
 ├── tools/
-│   ├── capture.sh    # captures d'écran (contre la vraie API)
-│   └── exemples.sh   # enregistre des sorties réelles dans exemples/
+│   ├── capture.sh    # screenshots (against the real API)
+│   └── exemples.sh   # records real outputs into exemples/
 ├── exemples/sortie-exemples.txt
 ├── screenshots/
-├── GESTION-ERREURS.md   # note sur la gestion des erreurs (livrable)
-├── TESTS-MANUELS.md     # 22 cas manuels contre la vraie API
+├── GESTION-ERREURS.md   # note on error handling (deliverable)
+├── TESTS-MANUELS.md     # 22 manual cases against the real API
 ├── NOTICE.md
 ├── requirements.txt
 └── README.md
 ```
 
-## Choix de l'API
+## Choice of the API
 
-La fiche demande de choisir l'API « avec le formateur ». Faute de pouvoir le consulter,
-j'ai retenu **Frankfurter** ([frankfurter.dev](https://frankfurter.dev)), à valider avec
-lui. Critères : gratuite, sans compte ni clé, documentée, stable, et pertinente pour un
-usage suisse (le franc suisse y est une devise de départ). Elle propose les deux familles
-d'appels dont l'exercice a besoin : un point simple (`/v1/latest`) et un point avec dates
-et séries (`/v1/AAAA-MM-JJ..AAAA-MM-JJ`).
+The brief asks to choose the API "with the instructor". Unable to consult them,
+I picked **Frankfurter** ([frankfurter.dev](https://frankfurter.dev)), to be validated with
+them. Criteria: free, no account or key, documented, stable, and relevant for
+Swiss use (the Swiss franc is a base currency there). It offers both kinds
+of calls the exercise needs: a simple endpoint (`/v1/latest`) and an endpoint with dates
+and series (`/v1/YYYY-MM-DD..YYYY-MM-DD`).
 
-| Appel du client | Requête HTTP |
+| Client call | HTTP request |
 | --- | --- |
 | `devises` | `GET /v1/currencies` |
-| `taux`, `convertir` | `GET /v1/latest?base=CHF&symbols=EUR,USD[&amount=250]` ou `GET /v1/AAAA-MM-JJ?...` |
+| `taux`, `convertir` | `GET /v1/latest?base=CHF&symbols=EUR,USD[&amount=250]` or `GET /v1/YYYY-MM-DD?...` |
 | `historique` | `GET /v1/2026-10-01..2026-10-28?base=CHF&symbols=EUR` |
 
-**Clé d'API.** Frankfurter n'en demande pas. Le cas « clé manquante » de la fiche est
-tout de même géré (HTTP 401 / 403) et testé : voir [`GESTION-ERREURS.md`](./GESTION-ERREURS.md).
+**API key.** Frankfurter does not require one. The brief's "missing key" case is
+still handled (HTTP 401 / 403) and tested: see [`GESTION-ERREURS.md`](./GESTION-ERREURS.md).
 
-## Conception
+## Design
 
-| Module | Rôle | Ce qu'il ne fait pas |
+| Module | Role | What it does not do |
 | --- | --- | --- |
-| `api.py` | classe `ClientTaux` : `devises()`, `taux()`, `historique()` ; validations ; conversion des échecs en trois erreurs distinctes ; nouvelles tentatives | aucun affichage |
-| `cli.py` | arguments `argparse`, mise en forme des tableaux, codes de sortie | aucune requête directe, aucune validation du JSON |
+| `api.py` | class `ClientTaux`: `devises()`, `taux()`, `historique()`; validations; conversion of failures into three distinct errors; retries | no display |
+| `cli.py` | `argparse` arguments, table formatting, exit codes | no direct request, no JSON validation |
 
-Points de conception :
+Design points:
 
-- **Valider avant d'envoyer.** Code de devise, date, montant et période sont contrôlés
-  localement : une saisie invalide ne génère aucune requête.
-- **Ne jamais faire confiance à la réponse.** Chaque champ utilisé est vérifié (présent,
-  du bon type, nombre fini, pas un booléen). Une réponse incomplète donne une erreur claire,
-  pas un `KeyError`.
-- **Un délai sur chaque requête** (10 s par défaut) : sans lui, `requests` peut attendre
-  indéfiniment.
-- **Nouvelles tentatives sélectives** : réseau, délai dépassé, 429 et 5xx sont rejoués
-  avec attente croissante ; les erreurs 4xx ne le sont jamais.
-- **Client injectable** : `cli.main(argv, client=...)` et `ClientTaux(url, session=...)`
-  permettent de tester sans Internet.
+- **Validate before sending.** Currency code, date, amount and period are checked
+  locally: an invalid input generates no request.
+- **Never trust the response.** Every field used is checked (present,
+  of the right type, finite number, not a boolean). An incomplete response gives a clear error,
+  not a `KeyError`.
+- **A timeout on every request** (10 s by default): without it, `requests` may wait
+  indefinitely.
+- **Selective retries**: network errors, timeouts, 429 and 5xx are retried
+  with increasing delay; 4xx errors never are.
+- **Injectable client**: `cli.main(argv, client=...)` and `ClientTaux(url, session=...)`
+  make it possible to test without Internet.
 
-## Captures d'écran
+## Screenshots
 
-Les captures montrent le **vrai programme contre la vraie API** : commandes réellement
-tapées dans un terminal (écran virtuel Xvfb, `xterm`, `xdotool`, `scrot`). Les taux sont
-ceux du 29 octobre 2026. [`tools/capture.sh`](./tools/capture.sh) les régénère (les taux
-affichés changeront).
+The screenshots show the **real program against the real API**: commands actually
+typed in a terminal (Xvfb virtual screen, `xterm`, `xdotool`, `scrot`). The rates are
+those of 29 October 2026. [`tools/capture.sh`](./tools/capture.sh) regenerates them (the rates
+shown will change).
 
-### 1. Aide et conversions
+### 1. Help and conversions
 
-![Aide et conversions](./screenshots/01-aide-et-conversions.png)
+![Help and conversions](./screenshots/01-aide-et-conversions.png)
 
-### 2. Taux, et cours d'un week-end
+### 2. Rates, and a weekend rate
 
-![Taux et week-end](./screenshots/02-taux-et-week-end.png)
+![Rates and weekend](./screenshots/02-taux-et-week-end.png)
 
-Pour le samedi 3 octobre, aucun cours n'est publié : le client utilise le vendredi 2
-octobre et le dit.
+For Saturday 3 October, no rate is published: the client uses Friday 2
+October and says so.
 
-### 3. Historique sur un mois et liste des devises
+### 3. One-month history and list of currencies
 
-![Historique et devises](./screenshots/03-historique-et-devises.png)
+![History and currencies](./screenshots/03-historique-et-devises.png)
 
-### 4. Gestion des erreurs
+### 4. Error handling
 
-![Gestion des erreurs](./screenshots/04-gestion-des-erreurs.png)
+![Error handling](./screenshots/04-gestion-des-erreurs.png)
 
-Devise inconnue (404), montant et dates invalides, période inversée, date trop ancienne,
-puis API injoignable avec 3 tentatives : 1,6 s, soit les attentes de 0.5 s et 1 s.
+Unknown currency (404), invalid amount and dates, reversed period, date too old,
+then unreachable API with 3 attempts: 1.6 s, i.e. the waits of 0.5 s and 1 s.
 
-### 5. Tests automatisés
+### 5. Automated tests
 
-![Tests automatisés](./screenshots/05-tests-automatises.png)
+![Automated tests](./screenshots/05-tests-automatises.png)
 
-## Tests et validation
+## Tests and validation
 
-| Type | Contenu | Résultat |
+| Type | Content | Result |
 | --- | --- | --- |
-| Automatisés (`unittest`) | validations, paramètres envoyés, 401 / 403 / 404 / 429 / 5xx, nouvelles tentatives et attentes, délai dépassé, serveur injoignable, huit formes de réponse inutilisable, commandes du CLI | 24/24 OK en 0,7 s, sans Internet, sans avertissement (`-W error`) |
-| Manuels documentés | 22 cas contre la vraie API | 22/22 conformes, voir [`TESTS-MANUELS.md`](./TESTS-MANUELS.md) |
-| Exemples de sortie | 4 requêtes différentes | [`exemples/sortie-exemples.txt`](./exemples/sortie-exemples.txt) |
+| Automated (`unittest`) | validations, parameters sent, 401 / 403 / 404 / 429 / 5xx, retries and waits, timeout, unreachable server, eight kinds of unusable response, CLI commands | 24/24 OK in 0.7 s, no Internet, no warnings (`-W error`) |
+| Documented manual | 22 cases against the real API | 22/22 passing, see [`TESTS-MANUELS.md`](./TESTS-MANUELS.md) |
+| Output examples | 4 different requests | [`exemples/sortie-exemples.txt`](./exemples/sortie-exemples.txt) |
 
-Les tests automatisés lancent un **serveur HTTP local** qui rejoue chaque situation
-d'erreur : le vrai code `requests` est exercé, mais rien ne dépend de l'API publique ni
-des taux du jour.
+The automated tests start a **local HTTP server** that replays each error
+situation: the real `requests` code is exercised, but nothing depends on the public API or
+on the rates of the day.
 
-## Difficultés et décisions
+## Difficulties and decisions
 
-- **Tester les erreurs réseau.** On ne peut pas faire tomber la vraie API à la demande ;
-  un serveur local factice (`http.server`) simule 500, 429, HTML, JSON incomplet et
-  réponses lentes.
-- **Tests trop lents au début** (13,8 s) : l'arrêt du serveur factice attendait jusqu'à
-  0,5 s à chaque test. Réduit en abaissant l'intervalle de `serve_forever` : 0,7 s.
-- **Week-ends.** L'API ne publie pas de cours le week-end et répond avec le dernier jour
-  ouvré. Sans traitement, l'utilisateur croirait avoir le cours du jour demandé : la date
-  réelle de la réponse est comparée à la date demandée et une remarque est affichée.
-- **Même devise des deux côtés.** `convertir 100 CHF CHF` donnait `HTTP 422 : bad currency
-  pair`. Refusé maintenant localement avec un message clair (trouvé pendant les essais
-  manuels).
-- **Montant converti.** Il vient de l'API (arrondi à 2 décimales) ; le taux affiché est
-  recalculé, d'où `1.0844` pour un résultat calculé à partir de `1.08436...`.
-- **Pas de clé d'API** avec Frankfurter : le cas est géré et testé quand même.
-- **Messages d'`argparse`** (`invalid choice`, `required`) en anglais, non traduits.
-- **Dépendance externe** : `requests` n'est pas dans la bibliothèque standard ; elle est
-  déclarée dans `requirements.txt` (la fiche la demande explicitement).
+- **Testing network errors.** You cannot make the real API fail on demand;
+  a fake local server (`http.server`) simulates 500, 429, HTML, incomplete JSON and
+  slow responses.
+- **Tests too slow at first** (13.8 s): stopping the fake server waited up to
+  0.5 s on every test. Reduced by lowering the `serve_forever` interval: 0.7 s.
+- **Weekends.** The API does not publish rates on weekends and answers with the last business
+  day. Without handling, the user would believe they got the rate of the requested day: the
+  actual date of the response is compared with the requested date and a note is displayed.
+- **Same currency on both sides.** `convertir 100 CHF CHF` produced `HTTP 422: bad currency
+  pair`. Now rejected locally with a clear message (found during manual
+  trials).
+- **Converted amount.** It comes from the API (rounded to 2 decimals); the displayed rate is
+  recomputed, hence `1.0844` for a result computed from `1.08436...`.
+- **No API key** with Frankfurter: the case is handled and tested anyway.
+- **`argparse` messages** (`invalid choice`, `required`) in English, not translated.
+- **External dependency**: `requests` is not in the standard library; it is
+  declared in `requirements.txt` (the brief explicitly asks for it).
 
-## Correspondance avec la fiche du projet
+## Mapping to the project brief
 
-| Critère d'évaluation | Pondération | Où le trouver |
+| Evaluation criterion | Weight | Where to find it |
 | --- | --- | --- |
-| Réalisation technique | 30 % | [`client_taux/`](./client_taux/), section [Conception](#conception) |
-| Respect des consignes | 25 % | tableau d'[avancement](#avancement) : 5 étapes et 3 livrables |
-| Tests / validation | 25 % | [`TESTS-MANUELS.md`](./TESTS-MANUELS.md), [`tests/`](./tests/), captures 4 et 5 |
-| Documentation | 20 % | ce README, [`GESTION-ERREURS.md`](./GESTION-ERREURS.md), [`NOTICE.md`](./NOTICE.md) |
+| Technical implementation | 30% | [`client_taux/`](./client_taux/), [Design](#design) section |
+| Following the instructions | 25% | [progress](#progress) table: 5 steps and 3 deliverables |
+| Tests / validation | 25% | [`TESTS-MANUELS.md`](./TESTS-MANUELS.md), [`tests/`](./tests/), screenshots 4 and 5 |
+| Documentation | 20% | this README, [`GESTION-ERREURS.md`](./GESTION-ERREURS.md), [`NOTICE.md`](./NOTICE.md) |
 
 ## Sources
 
-- Fiche du projet : [Satom-IT-Learning-Solutions/E3 — Projet 4](https://github.com/Satom-IT-Learning-Solutions/E3/blob/main/02-python-principes-de-base/projet-4-client-api-publique.md)
-- [Frankfurter — documentation de l'API](https://frankfurter.dev)
-- [requests — documentation officielle](https://requests.readthedocs.io/en/latest/)
-- [Python — Module json](https://docs.python.org/3/library/json.html)
+- Project brief: [Satom-IT-Learning-Solutions/E3 — Project 4](https://github.com/Satom-IT-Learning-Solutions/E3/blob/main/02-python-principes-de-base/projet-4-client-api-publique.md)
+- [Frankfurter — API documentation](https://frankfurter.dev)
+- [requests — official documentation](https://requests.readthedocs.io/en/latest/)
+- [Python — json module](https://docs.python.org/3/library/json.html)

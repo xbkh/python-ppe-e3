@@ -1,45 +1,45 @@
-# Projet 3 — Analyse d'un fichier CSV de ventes
+# Project 3 — Analysing a sales CSV file
 
-**Rendu PPE — Cours *Python — Principes de base* (classe E3).**
-Réalisé le **28 octobre 2026**. Niveau : intermédiaire.
+**PPE deliverable — Course *Python — Fundamentals* (class E3).**
+Completed on **28 October 2026**. Level: intermediate.
 
-Outil en ligne de commande qui lit l'export CSV des ventes d'un trimestre et en tire
-des statistiques sans ouvrir Excel : chiffre d'affaires, moyenne par vente, produit le
-plus vendu, regroupements par mois, région, catégorie et produit, filtres, tri et export
-d'une synthèse. Python 3 standard (module `csv`), **sans pandas ni autre dépendance**.
+Command-line tool that reads the CSV export of a quarter's sales and extracts
+statistics from it without opening Excel: revenue, average per sale, best-selling
+product, groupings by month, region, category and product, filters, sorting and export
+of a summary. Standard Python 3 (`csv` module), **no pandas or other dependency**.
 
-## Sommaire
+## Contents
 
-- [Avancement](#avancement)
-- [Démarrage rapide](#démarrage-rapide)
-- [Structure du dépôt](#structure-du-dépôt)
-- [Les données](#les-données)
-- [Conception](#conception)
-- [Captures d'écran](#captures-décran)
-- [Tests et validation](#tests-et-validation)
-- [Difficultés et décisions](#difficultés-et-décisions)
-- [Correspondance avec la fiche du projet](#correspondance-avec-la-fiche-du-projet)
+- [Progress](#progress)
+- [Quick start](#quick-start)
+- [Repository structure](#repository-structure)
+- [The data](#the-data)
+- [Design](#design)
+- [Screenshots](#screenshots)
+- [Tests and validation](#tests-and-validation)
+- [Difficulties and decisions](#difficulties-and-decisions)
+- [Mapping to the project brief](#mapping-to-the-project-brief)
 - [Sources](#sources)
 
-## Avancement
+## Progress
 
-| Étape de la fiche | État |
+| Brief step | Status |
 | --- | --- |
-| 1. Récupérer ou générer un jeu de données CSV de ventes réaliste | Terminé : 320 ventes sur le 3e trimestre 2026, [générées](./tools/generer_donnees.py) avec une graine fixe |
-| 2. Lire le fichier avec le module `csv` | Terminé : [`lecture.py`](./analyse_ventes/lecture.py), pandas non utilisé |
-| 3. CA total, moyenne par vente, produit le plus vendu | Terminé : [`stats.py`](./analyse_ventes/stats.py) |
-| 4. Trier et filtrer selon un critère (mois, région) | Terminé : filtres mois, région, catégorie ; tris `ca`, `quantite`, `nom` ; `--top` |
-| 5. Exporter une synthèse claire | Terminé : rapport texte et CSV, [`resultats/`](./resultats/) |
-| Livrable : script d'analyse commenté | [`analyse_ventes/`](./analyse_ventes/) |
-| Livrable : fichier de synthèse produit | [`resultats/synthese.txt`](./resultats/synthese.txt) et [`resultats/synthese-produits.csv`](./resultats/synthese-produits.csv) |
-| Livrable : note expliquant la méthode de calcul | [`METHODE.md`](./METHODE.md) |
+| 1. Get or generate a realistic sales CSV dataset | Done: 320 sales over Q3 2026, [generated](./tools/generer_donnees.py) with a fixed seed |
+| 2. Read the file with the `csv` module | Done: [`lecture.py`](./analyse_ventes/lecture.py), pandas not used |
+| 3. Total revenue, average per sale, best-selling product | Done: [`stats.py`](./analyse_ventes/stats.py) |
+| 4. Sort and filter by a criterion (month, region) | Done: month, region, category filters; `ca`, `quantite`, `nom` sorts; `--top` |
+| 5. Export a clear summary | Done: text and CSV report, [`resultats/`](./resultats/) |
+| Deliverable: commented analysis script | [`analyse_ventes/`](./analyse_ventes/) |
+| Deliverable: generated summary file | [`resultats/synthese.txt`](./resultats/synthese.txt) and [`resultats/synthese-produits.csv`](./resultats/synthese-produits.csv) |
+| Deliverable: note explaining the calculation method | [`METHODE.md`](./METHODE.md) |
 
-## Démarrage rapide
+## Quick start
 
-Prérequis : Python 3.8 ou plus récent (testé avec Python 3.12.3 sous Linux).
+Prerequisites: Python 3.8 or newer (tested with Python 3.12.3 on Linux).
 
 ```bash
-git clone https://github.com/bilkl/python-ppe-e3.git
+git clone https://github.com/xbkh/python-ppe-e3.git
 cd python-ppe-e3/projet-3-analyse-csv-ventes
 
 python3 -m analyse_ventes data/ventes_t3_2026.csv
@@ -47,159 +47,159 @@ python3 -m analyse_ventes data/ventes_t3_2026.csv --mois 2026-08 --region Vaud -
 python3 -m analyse_ventes data/ventes_t3_2026.csv --sortie resultats
 ```
 
-Toutes les options sont dans [`NOTICE.md`](./NOTICE.md). Lancer les tests :
+All options are in [`NOTICE.md`](./NOTICE.md). Run the tests:
 
 ```bash
 python3 -m unittest -v
 ```
 
-## Structure du dépôt
+## Repository structure
 
 ```text
 .
 ├── analyse_ventes/
-│   ├── __main__.py     # point d'entrée : python3 -m analyse_ventes
-│   ├── cli.py          # arguments et orchestration
-│   ├── lecture.py      # lecture du CSV, validation ligne par ligne, rejets
-│   ├── stats.py        # calculs (Decimal) : CA, moyenne, regroupements, tri, filtres
-│   └── export.py       # mise en forme du rapport, écriture de la synthèse
+│   ├── __main__.py     # entry point: python3 -m analyse_ventes
+│   ├── cli.py          # arguments and orchestration
+│   ├── lecture.py      # CSV reading, row-by-row validation, rejections
+│   ├── stats.py        # calculations (Decimal): revenue, average, groupings, sorting, filters
+│   └── export.py       # report formatting, summary writing
 ├── data/
-│   ├── ventes_t3_2026.csv       # 320 ventes valides (fictives)
-│   └── ventes_avec_erreurs.csv  # 10 lignes dont 7 invalides
-├── resultats/                   # synthèse produite sur le jeu complet
-├── tests/test_analyse.py        # 29 tests automatisés (unittest)
+│   ├── ventes_t3_2026.csv       # 320 valid sales (fictional)
+│   └── ventes_avec_erreurs.csv  # 10 rows, 7 of them invalid
+├── resultats/                   # summary produced on the full dataset
+├── tests/test_analyse.py        # 29 automated tests (unittest)
 ├── tools/
-│   ├── generer_donnees.py       # génère les deux CSV (reproductible)
-│   ├── verification_croisee.sh  # recalcul indépendant avec awk
-│   └── capture.sh               # génère les captures d'écran
+│   ├── generer_donnees.py       # generates the two CSVs (reproducible)
+│   ├── verification_croisee.sh  # independent recomputation with awk
+│   └── capture.sh               # generates the screenshots
 ├── screenshots/
-├── METHODE.md          # méthode de calcul (livrable)
-├── TESTS-MANUELS.md    # 21 cas manuels, recoupés avec awk
-├── NOTICE.md           # notice d'utilisation
+├── METHODE.md          # calculation method (deliverable)
+├── TESTS-MANUELS.md    # 21 manual cases, cross-checked with awk
+├── NOTICE.md           # user guide
 └── README.md
 ```
 
-## Les données
+## The data
 
-Les données sont **fictives** : un export de PME de matériel de bureau, du 1er juillet au
-30 septembre 2026, 12 produits dans 3 catégories (informatique, accessoires, mobilier),
-6 régions romandes. Le générateur applique des poids de popularité, vend les articles
-chers à l'unité et les petits par lots, et réduit l'activité le week-end. Il est
-déterministe (graine fixée) : le même fichier est reproduit à chaque exécution.
+The data is **fictional**: an export from an office-supplies SME, from 1 July to
+30 September 2026, 12 products in 3 categories (IT, accessories, furniture),
+6 French-speaking Swiss regions. The generator applies popularity weights, sells
+expensive items one at a time and small ones in batches, and reduces activity on weekends. It is
+deterministic (fixed seed): the same file is reproduced on every run.
 
 ```text
 date;id_vente;produit;categorie;region;quantite;prix_unitaire
 2026-07-01;V-0001;Webcam HD;Accessoires;Genève;1;79.00
 ```
 
-Un second fichier, `ventes_avec_erreurs.csv`, contient les défauts typiques d'un export
-réel (quantité non numérique, date au mauvais format, quantité négative, champ vide,
-identifiant en double, prix `nan`, colonne manquante, virgule décimale) pour tester la
-robustesse.
+A second file, `ventes_avec_erreurs.csv`, contains the typical defects of a real
+export (non-numeric quantity, wrongly formatted date, negative quantity, empty field,
+duplicate ID, `nan` price, missing column, decimal comma) to test
+robustness.
 
-## Conception
+## Design
 
-Quatre modules, une responsabilité chacun :
+Four modules, one responsibility each:
 
-| Module | Rôle | Ce qu'il ne fait pas |
+| Module | Role | What it does not do |
 | --- | --- | --- |
-| `lecture.py` | `lire_ventes` renvoie les ventes valides, les rejets (numéro de ligne + raison) et le nombre de lignes | aucun calcul statistique |
-| `stats.py` | `chiffre_affaires`, `moyenne_par_vente`, `grouper`, `trier`, `filtrer`, `produit_le_plus_vendu` | aucune lecture de fichier, aucun affichage |
-| `export.py` | rapport texte aligné, montants en CHF, écriture de `synthese.txt` et `synthese-produits.csv` | aucun calcul |
-| `cli.py` | arguments `argparse`, enchaînement, codes de sortie | aucune logique métier |
+| `lecture.py` | `lire_ventes` returns the valid sales, the rejections (line number + reason) and the number of lines | no statistical calculation |
+| `stats.py` | `chiffre_affaires`, `moyenne_par_vente`, `grouper`, `trier`, `filtrer`, `produit_le_plus_vendu` | no file reading, no display |
+| `export.py` | aligned text report, amounts in CHF, writing of `synthese.txt` and `synthese-produits.csv` | no calculation |
+| `cli.py` | `argparse` arguments, sequencing, exit codes | no business logic |
 
-Décisions de conception principales :
+Main design decisions:
 
-- **Une ligne invalide n'arrête pas l'analyse.** Elle est écartée et signalée (numéro,
-  raison) ; seul un fichier inutilisable (absent, vide, mal encodé, colonnes manquantes)
-  donne une erreur. Le rapport montre toujours combien de lignes ont été lues, gardées,
-  rejetées.
-- **`Decimal` pour l'argent**, pas `float` : les sommes sont exactes (voir
+- **An invalid row does not stop the analysis.** It is skipped and reported (number,
+  reason); only an unusable file (missing, empty, badly encoded, missing columns)
+  gives an error. The report always shows how many rows were read, kept and
+  rejected.
+- **`Decimal` for money**, not `float`: sums are exact (see
   [`METHODE.md`](./METHODE.md)).
-- **Définitions explicites** : « plus vendu » = plus d'unités ; le produit au plus gros
-  chiffre d'affaires est affiché à côté.
-- **Résultats déterministes** : toute égalité de tri est départagée de façon fixe.
+- **Explicit definitions**: "best-selling" = most units; the product with the highest
+  revenue is displayed next to it.
+- **Deterministic results**: every sorting tie is broken in a fixed way.
 
-## Captures d'écran
+## Screenshots
 
-Les captures montrent le **vrai programme** : commandes réellement tapées dans un
-terminal (écran virtuel Xvfb, `xterm`, `xdotool`, `scrot`). [`tools/capture.sh`](./tools/capture.sh)
-les régénère, ainsi que [`resultats/`](./resultats/).
+The screenshots show the **real program**: commands actually typed in a
+terminal (Xvfb virtual screen, `xterm`, `xdotool`, `scrot`). [`tools/capture.sh`](./tools/capture.sh)
+regenerates them, as well as [`resultats/`](./resultats/).
 
-### 1. Aperçu du CSV et analyse complète
+### 1. CSV preview and full analysis
 
-![Analyse complète](./screenshots/01-analyse-complete.png)
+![Full analysis](./screenshots/01-analyse-complete.png)
 
-Les 320 ventes : CA CHF 89'754.00, moyenne CHF 280.48. Le produit le plus vendu est le
-câble HDMI (197 unités) mais le plus gros chiffre d'affaires vient de l'ordinateur
-portable (13 unités seulement).
+The 320 sales: revenue CHF 89'754.00, average CHF 280.48. The best-selling product is the
+HDMI cable (197 units) but the highest revenue comes from the laptop
+(only 13 units).
 
-### 2. Filtres, tri et top
+### 2. Filters, sorting and top
 
-![Filtres, tri, top](./screenshots/02-filtres-tri-top.png)
+![Filters, sorting, top](./screenshots/02-filtres-tri-top.png)
 
-Août, région Vaud, produits triés par quantité, 5 premiers.
+August, Vaud region, products sorted by quantity, top 5.
 
-### 3. Lignes invalides écartées
+### 3. Invalid rows skipped
 
-![Lignes rejetées](./screenshots/03-lignes-rejetees.png)
+![Rejected rows](./screenshots/03-lignes-rejetees.png)
 
-Sur 10 lignes, 7 sont rejetées avec leur numéro et leur raison ; les 3 valides sont
-analysées (dont la ligne au prix `59,90`, virgule décimale acceptée).
+Out of 10 rows, 7 are rejected with their number and reason; the 3 valid ones are
+analysed (including the row with price `59,90`, decimal comma accepted).
 
-### 4. Export de la synthèse
+### 4. Summary export
 
-![Export de la synthèse](./screenshots/04-export-synthese.png)
+![Summary export](./screenshots/04-export-synthese.png)
 
-### 5. Vérification croisée avec `awk`
+### 5. Cross-check with `awk`
 
-![Vérification croisée](./screenshots/05-verification-croisee-awk.png)
+![Cross-check](./screenshots/05-verification-croisee-awk.png)
 
-`awk` recalcule les indicateurs sans le code Python : mêmes valeurs, au centime.
+`awk` recomputes the indicators without the Python code: same values, to the cent.
 
-### 6. Tests automatisés
+### 6. Automated tests
 
-![Tests automatisés](./screenshots/06-tests-automatises.png)
+![Automated tests](./screenshots/06-tests-automatises.png)
 
-## Tests et validation
+## Tests and validation
 
-| Type | Contenu | Résultat |
+| Type | Content | Result |
 | --- | --- | --- |
-| Automatisés (`unittest`) | lecture (délimiteurs, BOM, guillemets, huit sortes de lignes rejetées, erreurs fatales), statistiques sur un jeu de 4 ventes calculé à la main, précision décimale, égalités, filtres, tri, export, CLI | 29/29 OK, sans avertissement (`-W error`) |
-| Manuels documentés | 21 cas, recoupés avec `awk` quand c'est possible | 21/21 conformes, voir [`TESTS-MANUELS.md`](./TESTS-MANUELS.md) |
-| Vérification croisée | recalcul indépendant en `awk` des indicateurs et du CA mensuel | identique au centime |
+| Automated (`unittest`) | reading (delimiters, BOM, quotes, eight kinds of rejected rows, fatal errors), statistics on a 4-sale dataset computed by hand, decimal precision, ties, filters, sorting, export, CLI | 29/29 OK, no warnings (`-W error`) |
+| Documented manual | 21 cases, cross-checked with `awk` where possible | 21/21 passing, see [`TESTS-MANUELS.md`](./TESTS-MANUELS.md) |
+| Cross-check | independent recomputation in `awk` of the indicators and monthly revenue | identical to the cent |
 
-## Difficultés et décisions
+## Difficulties and decisions
 
-- **Tri alphabétique et accents.** Le premier test de tri a échoué : Python classe
-  « Écran » après « Souris », car les lettres accentuées viennent après `z` dans l'ordre
-  des caractères. Corrigé avec une clé de tri sans accents ni casse (`cle_alpha`).
-- **Un test mal écrit de ma part.** Un autre échec du même passage venait d'un décompte
-  attendu faux dans le test (9 au lieu de 10 lignes de données), pas du programme ;
-  corrigé dans le test.
-- **Flottants.** Avec des `float`, les sommes de montants risquent des écarts d'arrondi ; avec
-  `Decimal`, elles sont exactes et le recoupement `awk` tombe juste.
-- **`1 unités`.** La première sortie affichait « 1 unités » : accord au singulier ajouté.
-- **Lignes vides et séparateurs.** Les lignes vides (ou faites de séparateurs seuls)
-  sont ignorées sans compter comme rejets, car elles se glissent souvent en fin de
-  fichier dans les exports.
-- **Données fictives.** Aucune donnée commerciale réelle n'est utilisée.
-- **Messages d'`argparse`** (`invalid choice`, `required`) restent en anglais.
-- **Pas de pandas** : le module `csv` suffit pour cette taille de fichier, et la
-  fiche le propose en première option.
+- **Alphabetical sorting and accents.** The first sorting test failed: Python sorts
+  "Écran" after "Souris", because accented letters come after `z` in character
+  order. Fixed with a sort key that ignores accents and case (`cle_alpha`).
+- **A badly written test on my part.** Another failure in the same run came from a wrong
+  expected count in the test (9 instead of 10 data rows), not from the program;
+  fixed in the test.
+- **Floats.** With `float`, sums of amounts risk rounding errors; with
+  `Decimal`, they are exact and the `awk` cross-check matches.
+- **`1 unités`.** The first output displayed "1 unités": singular agreement added.
+- **Empty rows and separators.** Empty rows (or rows made only of separators)
+  are ignored without counting as rejections, since they often slip in at the end of
+  exported files.
+- **Fictional data.** No real commercial data is used.
+- **`argparse` messages** (`invalid choice`, `required`) remain in English.
+- **No pandas**: the `csv` module is enough for this file size, and the
+  brief suggests it as the first option.
 
-## Correspondance avec la fiche du projet
+## Mapping to the project brief
 
-| Critère d'évaluation | Pondération | Où le trouver |
+| Evaluation criterion | Weight | Where to find it |
 | --- | --- | --- |
-| Réalisation technique | 30 % | [`analyse_ventes/`](./analyse_ventes/), section [Conception](#conception) |
-| Respect des consignes | 25 % | tableau d'[avancement](#avancement) : 5 étapes et 3 livrables |
-| Tests / validation | 25 % | [`TESTS-MANUELS.md`](./TESTS-MANUELS.md), [`tests/`](./tests/), captures 03 à 06 |
-| Documentation | 20 % | ce README, [`METHODE.md`](./METHODE.md), [`NOTICE.md`](./NOTICE.md), docstrings |
+| Technical implementation | 30% | [`analyse_ventes/`](./analyse_ventes/), [Design](#design) section |
+| Following the instructions | 25% | [progress](#progress) table: 5 steps and 3 deliverables |
+| Tests / validation | 25% | [`TESTS-MANUELS.md`](./TESTS-MANUELS.md), [`tests/`](./tests/), screenshots 03 to 06 |
+| Documentation | 20% | this README, [`METHODE.md`](./METHODE.md), [`NOTICE.md`](./NOTICE.md), docstrings |
 
 ## Sources
 
-- Fiche du projet : [Satom-IT-Learning-Solutions/E3 — Projet 3](https://github.com/Satom-IT-Learning-Solutions/E3/blob/main/02-python-principes-de-base/projet-3-analyse-csv-ventes.md)
-- [Python — Module csv](https://docs.python.org/3/library/csv.html)
-- [Python — Module decimal](https://docs.python.org/3/library/decimal.html)
-- [Python — Module unicodedata](https://docs.python.org/3/library/unicodedata.html)
+- Project brief: [Satom-IT-Learning-Solutions/E3 — Project 3](https://github.com/Satom-IT-Learning-Solutions/E3/blob/main/02-python-principes-de-base/projet-3-analyse-csv-ventes.md)
+- [Python — csv module](https://docs.python.org/3/library/csv.html)
+- [Python — decimal module](https://docs.python.org/3/library/decimal.html)
+- [Python — unicodedata module](https://docs.python.org/3/library/unicodedata.html)

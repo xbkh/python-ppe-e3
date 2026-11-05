@@ -1,196 +1,196 @@
-# Projet 1 — Calculatrice et convertisseur d'unités en ligne de commande
+# Project 1 — Command-line calculator and unit converter
 
-**Rendu PPE — Cours *Python — Principes de base* (classe E3).**
-Réalisé le **26 octobre 2026**. Niveau : débutant.
+**PPE deliverable — Course *Python — Fundamentals* (class E3).**
+Completed on **26 October 2026**. Level: beginner.
 
-Petit outil pédagogique en ligne de commande : six opérations de calcul et
-trois convertisseurs d'unités (température, longueur, poids), avec une saisie
-protégée contre les erreurs (texte, valeur vide, division par zéro, unité
-inconnue, zéro absolu). Code en Python 3 standard, **sans aucune dépendance**.
+A small educational command-line tool: six calculation operations and three unit
+converters (temperature, length, weight), with input protected against errors (text,
+empty value, division by zero, unknown unit, absolute zero). Standard Python 3 code,
+**with no dependencies at all**.
 
-## Sommaire
+## Contents
 
-- [Avancement](#avancement)
-- [Démarrage rapide](#démarrage-rapide)
-- [Fonctionnalités](#fonctionnalités)
-- [Structure du dépôt](#structure-du-dépôt)
-- [Conception](#conception)
-- [Captures d'écran](#captures-décran)
-- [Tests et validation](#tests-et-validation)
-- [Difficultés et décisions](#difficultés-et-décisions)
-- [Correspondance avec la fiche du projet](#correspondance-avec-la-fiche-du-projet)
+- [Progress](#progress)
+- [Quick start](#quick-start)
+- [Features](#features)
+- [Repository structure](#repository-structure)
+- [Design](#design)
+- [Screenshots](#screenshots)
+- [Tests and validation](#tests-and-validation)
+- [Difficulties and decisions](#difficulties-and-decisions)
+- [Mapping to the project brief](#mapping-to-the-project-brief)
 - [Sources](#sources)
 
-## Avancement
+## Progress
 
-| Étape de la fiche | État |
+| Brief step | Status |
 | --- | --- |
-| 1. Définir les opérations et conversions | Terminé |
-| 2. Une fonction par opération/conversion | Terminé |
-| 3. Menu interactif en ligne de commande | Terminé |
-| 4. Gestion des erreurs de saisie | Terminé |
-| 5. Tests avec plusieurs scénarios, dont cas invalides | Terminé : 20 tests automatisés (OK) + 28 cas manuels documentés |
-| Livrable : script Python commenté | [`calculatrice.py`](./calculatrice.py) |
-| Livrable : jeu de tests manuels documenté | [`TESTS-MANUELS.md`](./TESTS-MANUELS.md) |
-| Livrable : courte notice d'utilisation | [`NOTICE.md`](./NOTICE.md) |
+| 1. Define the operations and conversions | Done |
+| 2. One function per operation/conversion | Done |
+| 3. Interactive command-line menu | Done |
+| 4. Input error handling | Done |
+| 5. Tests with several scenarios, including invalid cases | Done: 20 automated tests (OK) + 28 documented manual cases |
+| Deliverable: commented Python script | [`calculatrice.py`](./calculatrice.py) |
+| Deliverable: documented manual test set | [`TESTS-MANUELS.md`](./TESTS-MANUELS.md) |
+| Deliverable: short user guide | [`NOTICE.md`](./NOTICE.md) |
 
-## Démarrage rapide
+## Quick start
 
-Prérequis : Python 3.8 ou plus récent (testé avec Python 3.12.3 sous Linux).
+Prerequisites: Python 3.8 or newer (tested with Python 3.12.3 on Linux).
 
 ```bash
-git clone https://github.com/bilkl/python-ppe-e3.git
+git clone https://github.com/xbkh/python-ppe-e3.git
 cd python-ppe-e3/projet-1-calculatrice-convertisseur
 python3 calculatrice.py
 ```
 
-Lancer les tests automatisés :
+Run the automated tests:
 
 ```bash
 python3 -m unittest -v
 ```
 
-## Fonctionnalités
+## Features
 
-| Menu | Fonction | Détail |
+| Menu | Function | Detail |
 | --- | --- | --- |
 | 1 | Addition | `a + b` |
-| 2 | Soustraction | `a - b` |
+| 2 | Subtraction | `a - b` |
 | 3 | Multiplication | `a * b` |
-| 4 | Division | refuse la division par zéro |
-| 5 | Puissance | refuse `0` puissance négative, les résultats non réels et les dépassements |
-| 6 | Modulo | refuse le modulo par zéro |
-| 7 | Température | `C`, `F`, `K`, refuse les valeurs sous le zéro absolu |
-| 8 | Longueur | `mm`, `cm`, `m`, `km`, `in`, `ft`, `yd`, `mi`, refuse les valeurs négatives |
-| 9 | Poids | `mg`, `g`, `kg`, `t`, `oz`, `lb`, refuse les valeurs négatives |
-| 0 | Quitter | |
+| 4 | Division | rejects division by zero |
+| 5 | Power | rejects `0` to a negative power, non-real results and overflows |
+| 6 | Modulo | rejects modulo by zero |
+| 7 | Temperature | `C`, `F`, `K`, rejects values below absolute zero |
+| 8 | Length | `mm`, `cm`, `m`, `km`, `in`, `ft`, `yd`, `mi`, rejects negative values |
+| 9 | Weight | `mg`, `g`, `kg`, `t`, `oz`, `lb`, rejects negative values |
+| 0 | Quit | |
 
-La virgule décimale (`2,5`) est acceptée comme le point (`2.5`). Les unités ne
-sont pas sensibles à la casse (`KM` = `km`).
+The decimal comma (`2,5`) is accepted like the dot (`2.5`). Units are not
+case-sensitive (`KM` = `km`).
 
-## Structure du dépôt
+## Repository structure
 
 ```text
 .
-├── calculatrice.py            # le programme (logique + menu)
+├── calculatrice.py            # the program (logic + menu)
 ├── tests/
-│   └── test_calculatrice.py   # 20 tests automatisés (unittest)
+│   └── test_calculatrice.py   # 20 automated tests (unittest)
 ├── tools/
-│   └── capture.sh             # génère les captures d'écran
-├── screenshots/               # captures utilisées ci-dessous
-├── TESTS-MANUELS.md           # jeu de tests manuels (entrées / sorties)
-├── NOTICE.md                  # notice d'utilisation
+│   └── capture.sh             # generates the screenshots
+├── screenshots/               # screenshots used below
+├── TESTS-MANUELS.md           # manual test set (inputs / outputs)
+├── NOTICE.md                  # user guide
 └── README.md
 ```
 
-## Conception
+## Design
 
-Le code sépare deux couches :
+The code separates two layers:
 
-1. **Logique pure** : une fonction par opération (`addition`, `division`, ...)
-   et par conversion (`convertir_temperature`, `convertir_longueur`,
-   `convertir_poids`). Elles reçoivent des paramètres, renvoient une valeur et
-   signalent un problème par `ValueError`. Aucune ne lit le clavier ni
-   n'affiche quoi que ce soit, ce qui les rend testables seules.
-2. **Interface** : `parse_nombre`, `lire_nombre` et `lire_unite` valident la
-   saisie et redemandent tant qu'elle est invalide ; `main` affiche le menu et
-   appelle la bonne fonction. La fonction de saisie est un paramètre
-   (`saisie=input`), ce qui permet de simuler un utilisateur dans les tests.
+1. **Pure logic**: one function per operation (`addition`, `division`, ...)
+   and per conversion (`convertir_temperature`, `convertir_longueur`,
+   `convertir_poids`). They receive parameters, return a value and
+   report a problem with `ValueError`. None of them reads the keyboard or
+   prints anything, which makes them testable on their own.
+2. **Interface**: `parse_nombre`, `lire_nombre` and `lire_unite` validate the
+   input and ask again until it is valid; `main` displays the menu and
+   calls the right function. The input function is a parameter
+   (`saisie=input`), which makes it possible to simulate a user in the tests.
 
-Les conversions de longueur et de poids utilisent **une unité pivot** (mètre,
-kilogramme) : une table de facteurs suffit, et ajouter une unité revient à
-ajouter une ligne. La température passe par le Celsius.
+Length and weight conversions use **a pivot unit** (metre,
+kilogram): a table of factors is enough, and adding a unit means
+adding one line. Temperature goes through Celsius.
 
-## Captures d'écran
+## Screenshots
 
-Les captures montrent le **vrai programme** exécuté dans un terminal. Elles sont
-produites par [`tools/capture.sh`](./tools/capture.sh) : écran virtuel isolé
-(Xvfb), terminal xterm, touches envoyées par `xdotool`, capture par `scrot`.
-Le script est fourni, les captures sont donc reproductibles.
+The screenshots show the **real program** running in a terminal. They are
+produced by [`tools/capture.sh`](./tools/capture.sh): isolated virtual screen
+(Xvfb), xterm terminal, keys sent by `xdotool`, capture by `scrot`.
+The script is provided, so the screenshots are reproducible.
 
-### 1. Menu principal
+### 1. Main menu
 
-![Menu principal](./screenshots/01-menu-principal.png)
+![Main menu](./screenshots/01-menu-principal.png)
 
-### 2. Calculs : addition, puis division par zéro refusée
+### 2. Calculations: addition, then division by zero rejected
 
-Entrée : `1` → `12,5` → `7.5` (virgule et point acceptés), puis `4` → `10` → `0`.
+Input: `1` → `12,5` → `7.5` (comma and dot accepted), then `4` → `10` → `0`.
 
-![Calculs et division par zéro](./screenshots/02-calculs-division-par-zero.png)
+![Calculations and division by zero](./screenshots/02-calculs-division-par-zero.png)
 
-### 3. Conversions : température, longueur, poids
+### 3. Conversions: temperature, length, weight
 
 `100 C = 212 F`, `5 km = 3.106856 mi`, `2.5 kg = 5.511557 lb`.
 
 ![Conversions](./screenshots/03-conversions.png)
 
-### 4. Saisies invalides : choix de menu et nombres
+### 4. Invalid input: menu choice and numbers
 
-Un choix de menu `zzz`, puis dans la multiplication un nombre `abc` et une
-saisie vide sont refusés et redemandés ; le programme ne plante pas.
+A menu choice `zzz`, then in the multiplication a number `abc` and an
+empty input are rejected and asked again; the program does not crash.
 
-![Saisies invalides, nombres](./screenshots/04-saisies-invalides-nombres.png)
+![Invalid input, numbers](./screenshots/04-saisies-invalides-nombres.png)
 
-### 5. Saisies invalides : unités et zéro absolu
+### 5. Invalid input: units and absolute zero
 
-Unité `xx` refusée avec la liste des choix ; `-300 C` en Kelvin refusé car
-inférieur au zéro absolu.
+Unit `xx` rejected with the list of choices; `-300 C` to Kelvin rejected because
+it is below absolute zero.
 
-![Saisies invalides, unités](./screenshots/05-saisies-invalides-unites.png)
+![Invalid input, units](./screenshots/05-saisies-invalides-unites.png)
 
-### 6. Tests automatisés
+### 6. Automated tests
 
-20 tests, tous réussis.
+20 tests, all passing.
 
-![Tests automatisés](./screenshots/06-tests-automatises.png)
+![Automated tests](./screenshots/06-tests-automatises.png)
 
-## Tests et validation
+## Tests and validation
 
-| Type | Contenu | Résultat |
+| Type | Content | Result |
 | --- | --- | --- |
-| Automatisés (`unittest`) | opérations, conversions, cas limites, saisie, menu complet | 20/20 OK |
-| Manuels documentés | 28 cas avec entrées, résultat attendu et résultat observé | voir [`TESTS-MANUELS.md`](./TESTS-MANUELS.md) |
-| Captures d'écran | 6 captures du programme réel | ci-dessus |
+| Automated (`unittest`) | operations, conversions, edge cases, input, full menu | 20/20 OK |
+| Documented manual | 28 cases with inputs, expected result and observed result | see [`TESTS-MANUELS.md`](./TESTS-MANUELS.md) |
+| Screenshots | 6 screenshots of the real program | above |
 
-Les cas invalides couverts : choix de menu hors liste, texte à la place d'un
-nombre, saisie vide, `nan` / `inf` / dépassement (`1e999`), division et modulo
-par zéro, `0` puissance négative, racine d'un négatif, unité inconnue, valeur
-négative pour une longueur ou un poids, température sous le zéro absolu, fin de
-saisie (`Ctrl+D`) et interruption (`Ctrl+C`).
+Invalid cases covered: menu choice outside the list, text instead of a
+number, empty input, `nan` / `inf` / overflow (`1e999`), division and modulo
+by zero, `0` to a negative power, root of a negative number, unknown unit, negative
+value for a length or weight, temperature below absolute zero, end of
+input (`Ctrl+D`) and interruption (`Ctrl+C`).
 
-## Difficultés et décisions
+## Difficulties and decisions
 
-- **Pas de pytest.** Le module `unittest` fait partie de la bibliothèque
-  standard : le projet n'a donc aucune dépendance à installer. (`pytest` est
-  l'objet du projet 5.)
-- **Nombres flottants.** `0.1 + 0.2` vaut `0.30000000000000004` en binaire.
-  L'affichage est arrondi à 6 décimales sans zéros inutiles (`formater`), ce
-  qui affiche `0.3`. Les tests de conversion comparent avec `assertAlmostEqual`.
-- **`nan`, `inf` et `1e999`.** `float("nan")` est accepté par Python comme un
-  nombre valide ; il aurait produit des résultats absurdes. `parse_nombre`
-  refuse tout ce qui n'est pas fini.
-- **Zéro absolu.** Contrôlé en Celsius après conversion vers l'unité pivot, ce
-  qui couvre `K` négatif et `C` / `F` trop bas avec une seule règle.
-- **Captures dans un écran virtuel** plutôt que sur le bureau : elles ne
-  montrent que le terminal du programme, pas d'autres fenêtres. La première
-  version du scénario 4 était désynchronisée (une saisie en trop) : repérée en
-  relisant la capture, scénario corrigé et captures régénérées.
-- **Découverte des tests.** Sans fichier `tests/__init__.py`, `python3 -m unittest`
-  répond « NO TESTS RAN » : le dossier n'est pas exploré. Le fichier vide a été
-  ajouté (constaté à l'exécution, puis corrigé).
+- **No pytest.** The `unittest` module is part of the standard
+  library: the project therefore has no dependency to install. (`pytest` is
+  the subject of project 5.)
+- **Floating-point numbers.** `0.1 + 0.2` equals `0.30000000000000004` in binary.
+  The display is rounded to 6 decimals without useless zeros (`formater`), which
+  shows `0.3`. The conversion tests compare with `assertAlmostEqual`.
+- **`nan`, `inf` and `1e999`.** `float("nan")` is accepted by Python as a valid
+  number; it would have produced absurd results. `parse_nombre`
+  rejects anything that is not finite.
+- **Absolute zero.** Checked in Celsius after conversion to the pivot unit, which
+  covers negative `K` and too-low `C` / `F` with a single rule.
+- **Screenshots in a virtual screen** rather than on the desktop: they only
+  show the program's terminal, no other windows. The first
+  version of scenario 4 was out of sync (one extra input): spotted while
+  reviewing the screenshot, scenario fixed and screenshots regenerated.
+- **Test discovery.** Without a `tests/__init__.py` file, `python3 -m unittest`
+  answers "NO TESTS RAN": the folder is not explored. The empty file was
+  added (observed at run time, then fixed).
 
-## Correspondance avec la fiche du projet
+## Mapping to the project brief
 
-| Critère d'évaluation | Pondération | Où le trouver |
+| Evaluation criterion | Weight | Where to find it |
 | --- | --- | --- |
-| Réalisation technique | 30 % | [`calculatrice.py`](./calculatrice.py), section [Conception](#conception) |
-| Respect des consignes | 25 % | tableau d'[avancement](#avancement) : les 5 étapes et les 3 livrables |
-| Tests / validation | 25 % | [`TESTS-MANUELS.md`](./TESTS-MANUELS.md), [`tests/`](./tests/), captures |
-| Documentation | 20 % | ce README, [`NOTICE.md`](./NOTICE.md), docstrings du code |
+| Technical implementation | 30% | [`calculatrice.py`](./calculatrice.py), [Design](#design) section |
+| Following the instructions | 25% | [progress](#progress) table: the 5 steps and the 3 deliverables |
+| Tests / validation | 25% | [`TESTS-MANUELS.md`](./TESTS-MANUELS.md), [`tests/`](./tests/), screenshots |
+| Documentation | 20% | this README, [`NOTICE.md`](./NOTICE.md), code docstrings |
 
 ## Sources
 
-- Fiche du projet : [Satom-IT-Learning-Solutions/E3 — Projet 1](https://github.com/Satom-IT-Learning-Solutions/E3/blob/main/02-python-principes-de-base/projet-1-calculatrice-convertisseur.md)
-- [Python — Tutoriel officiel](https://docs.python.org/3/tutorial/)
-- [Python — Gestion des exceptions](https://docs.python.org/3/tutorial/errors.html)
+- Project brief: [Satom-IT-Learning-Solutions/E3 — Project 1](https://github.com/Satom-IT-Learning-Solutions/E3/blob/main/02-python-principes-de-base/projet-1-calculatrice-convertisseur.md)
+- [Python — Official tutorial](https://docs.python.org/3/tutorial/)
+- [Python — Exception handling](https://docs.python.org/3/tutorial/errors.html)
 - [Python — `unittest`](https://docs.python.org/3/library/unittest.html)

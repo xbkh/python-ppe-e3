@@ -1,348 +1,343 @@
-# PPE Python — Principes de base (classe E3)
+# PPE Python — Fundamentals (class E3)
 
-**Journal et documentation des 5 projets de la semaine PPE** du cours *Python — Principes
-de base*, avec les captures d'écran de chaque programme en fonctionnement.
+**Log and documentation of the 5 PPE projects of the week** for the course *Python — Fundamentals*,
+with screenshots of each program running.
 
-Les cinq projets suivent les fiches du [dépôt du cours](https://github.com/Satom-IT-Learning-Solutions/E3/tree/main/02-python-principes-de-base)
-(barème suisse, note sur 6, seuil de réussite 4.0). Chacun est livré avec son code, ses
-tests automatisés, ses tests manuels documentés, sa notice et ses captures. Dernière mise à
-jour : **30 octobre 2026**.
+The five projects follow the briefs in the [course repository](https://github.com/Satom-IT-Learning-Solutions/E3/tree/main/02-python-principes-de-base)
+(Swiss grading scale, mark out of 6, pass mark 4.0). Each one ships with its code, automated
+tests, documented manual tests, user guide and screenshots. Last updated: **30 October 2026**.
 
-## Sommaire
+## Contents
 
-- [Avancement](#avancement)
-- [Jour 1 — Calculatrice et convertisseur d'unités](#jour-1--calculatrice-et-convertisseur-dunités)
-- [Jour 2 — Gestionnaire de tâches en CLI](#jour-2--gestionnaire-de-tâches-en-cli)
-- [Jour 3 — Analyse d'un fichier CSV de ventes](#jour-3--analyse-dun-fichier-csv-de-ventes)
-- [Jour 4 — Client d'une API publique](#jour-4--client-dune-api-publique)
-- [Jour 5 — Mini-application testée avec pytest](#jour-5--mini-application-testée-avec-pytest)
-- [Bilan de la semaine](#bilan-de-la-semaine)
-- [Reproduire les résultats](#reproduire-les-résultats)
-- [Comment les captures ont été produites](#comment-les-captures-ont-été-produites)
+- [Progress](#progress)
+- [Day 1 — Calculator and unit converter](#day-1--calculator-and-unit-converter)
+- [Day 2 — Command-line task manager](#day-2--command-line-task-manager)
+- [Day 3 — Analysing a sales CSV file](#day-3--analysing-a-sales-csv-file)
+- [Day 4 — Public API client](#day-4--public-api-client)
+- [Day 5 — Mini application tested with pytest](#day-5--mini-application-tested-with-pytest)
+- [Week summary](#week-summary)
+- [Reproducing the results](#reproducing-the-results)
+- [How the screenshots were produced](#how-the-screenshots-were-produced)
 
-## Avancement
+## Progress
 
-Les « jours » numérotent les projets dans l'ordre de la fiche. Les dates indiquent quand
-chacun a réellement été réalisé : plusieurs projets ont été menés le même jour.
+The "days" number the projects in the order of the brief. The dates show when each one was
+actually completed: several projects were done on the same day.
 
-| Jour | Projet | Niveau | Réalisé le | Tests auto. | Cas manuels | Captures | État |
+| Day | Project | Level | Completed on | Auto. tests | Manual cases | Screenshots | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | [Calculatrice et convertisseur](./projet-1-calculatrice-convertisseur/) | Débutant | 26 oct. | 20 | 28 | 6 | Terminé |
-| 2 | [Gestionnaire de tâches en CLI](./projet-2-gestionnaire-taches-cli/) | Débutant / Intermédiaire | 28 oct. | 21 | 25 | 6 | Terminé |
-| 3 | [Analyse d'un CSV de ventes](./projet-3-analyse-csv-ventes/) | Intermédiaire | 28 oct. | 29 | 21 | 6 | Terminé |
-| 4 | [Client d'une API publique](./projet-4-client-api-publique/) | Intermédiaire / Avancé | 30 oct. | 24 | 22 | 5 | Terminé |
-| 5 | [Mini-application testée avec pytest](./projet-5-mini-application-tests-pytest/) | Avancé | 30 oct. | 165 | : | 5 | Terminé |
+| 1 | [Calculator and converter](./projet-1-calculatrice-convertisseur/) | Beginner | 26 Oct | 20 | 28 | 6 | Done |
+| 2 | [CLI task manager](./projet-2-gestionnaire-taches-cli/) | Beginner / Intermediate | 28 Oct | 21 | 25 | 6 | Done |
+| 3 | [Sales CSV analysis](./projet-3-analyse-csv-ventes/) | Intermediate | 28 Oct | 29 | 21 | 6 | Done |
+| 4 | [Public API client](./projet-4-client-api-publique/) | Intermediate / Advanced | 30 Oct | 24 | 22 | 5 | Done |
+| 5 | [Mini application tested with pytest](./projet-5-mini-application-tests-pytest/) | Advanced | 30 Oct | 165 | : | 5 | Done |
 | | **Total** | | | **259** | **96** | **28** | |
 
-Tous les tests automatisés passent. Les projets 1 à 4 n'utilisent que la bibliothèque
-standard de Python (plus `requests` pour le projet 4, que la fiche impose) ; le projet 5
-a besoin de `pytest` et `pytest-cov`.
+All automated tests pass. Projects 1 to 4 only use the Python standard library (plus `requests`
+for project 4, which the brief requires); project 5 needs `pytest` and `pytest-cov`.
 
 ---
 
-## Jour 1 — Calculatrice et convertisseur d'unités
+## Day 1 — Calculator and unit converter
 
-**Projet :** [`projet-1-calculatrice-convertisseur/`](./projet-1-calculatrice-convertisseur/) ·
-**Documentation complète :** [README](./projet-1-calculatrice-convertisseur/README.md),
-[tests manuels](./projet-1-calculatrice-convertisseur/TESTS-MANUELS.md),
-[notice](./projet-1-calculatrice-convertisseur/NOTICE.md)
+**Project:** [`projet-1-calculatrice-convertisseur/`](./projet-1-calculatrice-convertisseur/) ·
+**Full documentation:** [README](./projet-1-calculatrice-convertisseur/README.md),
+[manual tests](./projet-1-calculatrice-convertisseur/TESTS-MANUELS.md),
+[user guide](./projet-1-calculatrice-convertisseur/NOTICE.md)
 
-Outil en ligne de commande à menu : six opérations (addition, soustraction, multiplication,
-division, puissance, modulo) et trois convertisseurs (température, longueur, poids). Une
-fonction par opération, une logique pure séparée du menu, et une saisie qui redemande tant
-qu'elle est invalide.
+Menu-driven command-line tool: six operations (addition, subtraction, multiplication,
+division, power, modulo) and three converters (temperature, length, weight). One function
+per operation, pure logic separated from the menu, and input handling that asks again until
+the value is valid.
 
-**Points marquants**
-- Logique et interface séparées : les fonctions ne lisent ni n'affichent rien, donc se
-  testent seules. La fonction de saisie est un paramètre (`saisie=input`).
-- Conversions par **unité pivot** : ajouter une unité = ajouter une ligne dans une table.
-- Refus de `nan`, `inf`, `1e999` (Python les accepte comme des nombres valides) ; zéro
-  absolu contrôlé pour les températures.
-- **Résultats :** 20 tests automatisés, 28 cas manuels, tous conformes.
+**Highlights**
+- Logic and interface are separated: the functions neither read nor print anything, so they
+  can be tested on their own. The input function is a parameter (`saisie=input`).
+- Conversions go through a **pivot unit**: adding a unit means adding one line to a table.
+- `nan`, `inf` and `1e999` are rejected (Python accepts them as valid numbers); absolute zero
+  is checked for temperatures.
+- **Results:** 20 automated tests, 28 manual cases, all passing.
 
-### Captures
+### Screenshots
 
-**1. Menu principal**
+**1. Main menu**
 
-![Menu principal](./projet-1-calculatrice-convertisseur/screenshots/01-menu-principal.png)
+![Main menu](./projet-1-calculatrice-convertisseur/screenshots/01-menu-principal.png)
 
-**2. Calculs : addition, puis division par zéro refusée**
+**2. Calculations: addition, then division by zero rejected**
 
-![Calculs et division par zéro](./projet-1-calculatrice-convertisseur/screenshots/02-calculs-division-par-zero.png)
+![Calculations and division by zero](./projet-1-calculatrice-convertisseur/screenshots/02-calculs-division-par-zero.png)
 
-**3. Conversions : température, longueur, poids**
+**3. Conversions: temperature, length, weight**
 
 ![Conversions](./projet-1-calculatrice-convertisseur/screenshots/03-conversions.png)
 
-**4. Saisies invalides : choix de menu et nombres**
+**4. Invalid input: menu choice and numbers**
 
-![Saisies invalides, nombres](./projet-1-calculatrice-convertisseur/screenshots/04-saisies-invalides-nombres.png)
+![Invalid input, numbers](./projet-1-calculatrice-convertisseur/screenshots/04-saisies-invalides-nombres.png)
 
-**5. Saisies invalides : unités et zéro absolu**
+**5. Invalid input: units and absolute zero**
 
-![Saisies invalides, unités](./projet-1-calculatrice-convertisseur/screenshots/05-saisies-invalides-unites.png)
+![Invalid input, units](./projet-1-calculatrice-convertisseur/screenshots/05-saisies-invalides-unites.png)
 
-**6. Tests automatisés**
+**6. Automated tests**
 
-![Tests automatisés](./projet-1-calculatrice-convertisseur/screenshots/06-tests-automatises.png)
+![Automated tests](./projet-1-calculatrice-convertisseur/screenshots/06-tests-automatises.png)
 
-**Difficulté notable :** la première version du scénario de captures était désynchronisée
-(une saisie en trop). Repérée en relisant l'image, corrigée, captures régénérées.
-
----
-
-## Jour 2 — Gestionnaire de tâches en CLI
-
-**Projet :** [`projet-2-gestionnaire-taches-cli/`](./projet-2-gestionnaire-taches-cli/) ·
-**Documentation complète :** [README](./projet-2-gestionnaire-taches-cli/README.md),
-[format du fichier](./projet-2-gestionnaire-taches-cli/FORMAT-FICHIER.md),
-[tests manuels](./projet-2-gestionnaire-taches-cli/TESTS-MANUELS.md),
-[notice](./projet-2-gestionnaire-taches-cli/NOTICE.md)
-
-Gestionnaire de tâches (ajouter, lister avec filtres, terminer, supprimer) sauvegardé en
-JSON : les tâches survivent à la fermeture du programme. Découpé en trois modules (modèle,
-stockage, interface).
-
-**Points marquants**
-- Sauvegarde **atomique** (fichier temporaire puis renommage) : une coupure ne peut pas
-  tronquer le fichier.
-- Un fichier JSON **invalide n'est jamais écrasé** : le programme refuse de continuer, au
-  lieu de repartir d'une liste vide et de détruire les données.
-- Preuve de persistance par **deux terminaux distincts** (le premier est fermé avant le
-  second).
-- **Résultats :** 21 tests automatisés, 25 cas manuels, tous conformes.
-
-### Captures
-
-**1. Aide et ajout de tâches**
-
-![Ajout et liste](./projet-2-gestionnaire-taches-cli/screenshots/01-ajout-et-liste.png)
-
-**2. Terminer, supprimer, filtrer, erreurs**
-
-![Terminer, supprimer, erreurs](./projet-2-gestionnaire-taches-cli/screenshots/02-terminer-supprimer-erreurs.png)
-
-**3. Persistance, avant la fermeture** (liste et contenu JSON du fichier)
-
-![Persistance avant](./projet-2-gestionnaire-taches-cli/screenshots/03-persistance-avant.png)
-
-**4. Persistance, après redémarrage** (nouveau terminal : mêmes tâches retrouvées)
-
-![Persistance après redémarrage](./projet-2-gestionnaire-taches-cli/screenshots/04-persistance-apres-redemarrage.png)
-
-**5. Fichier corrompu refusé et jamais écrasé**
-
-![Fichier corrompu](./projet-2-gestionnaire-taches-cli/screenshots/05-fichier-corrompu.png)
-
-**6. Tests automatisés**
-
-![Tests automatisés](./projet-2-gestionnaire-taches-cli/screenshots/06-tests-automatises.png)
-
-**Difficulté notable :** les captures utilisaient `clear; commande` sur une seule ligne, ce
-qui effaçait la ligne de commande de l'image. Corrigé en deux frappes séparées. Limite
-assumée : l'identifiant d'une dernière tâche supprimée est réattribué (documenté).
+**Notable difficulty:** the first version of the screenshot script was out of sync (one extra
+input). Spotted while reviewing the image, fixed, screenshots regenerated.
 
 ---
 
-## Jour 3 — Analyse d'un fichier CSV de ventes
+## Day 2 — Command-line task manager
 
-**Projet :** [`projet-3-analyse-csv-ventes/`](./projet-3-analyse-csv-ventes/) ·
-**Documentation complète :** [README](./projet-3-analyse-csv-ventes/README.md),
-[méthode de calcul](./projet-3-analyse-csv-ventes/METHODE.md),
-[tests manuels](./projet-3-analyse-csv-ventes/TESTS-MANUELS.md),
-[notice](./projet-3-analyse-csv-ventes/NOTICE.md),
-[synthèse produite](./projet-3-analyse-csv-ventes/resultats/synthese.txt)
+**Project:** [`projet-2-gestionnaire-taches-cli/`](./projet-2-gestionnaire-taches-cli/) ·
+**Full documentation:** [README](./projet-2-gestionnaire-taches-cli/README.md),
+[file format](./projet-2-gestionnaire-taches-cli/FORMAT-FICHIER.md),
+[manual tests](./projet-2-gestionnaire-taches-cli/TESTS-MANUELS.md),
+[user guide](./projet-2-gestionnaire-taches-cli/NOTICE.md)
 
-Lecture d'un export CSV de 320 ventes (jeu de données fictif, 3e trimestre 2026, généré avec
-une graine fixe) et calcul de statistiques : chiffre d'affaires, moyenne par vente, produit
-le plus vendu, regroupements par mois, région, catégorie et produit, filtres, tri et export
-d'une synthèse. Module `csv`, sans pandas.
+Task manager (add, list with filters, complete, delete) saved as JSON: tasks survive closing
+the program. Split into three modules (model, storage, interface).
 
-**Points marquants**
-- Montants en `Decimal` : sommes **exactes**. Chiffre d'affaires : CHF 89'754.00.
-- Une ligne invalide est **écartée et signalée** (numéro de ligne + raison) sans arrêter
-  l'analyse.
-- **Vérification croisée** : les indicateurs sont recalculés avec `awk`, sans le code
-  Python ; résultats identiques au centime.
-- **Résultats :** 29 tests automatisés, 21 cas manuels, tous conformes.
+**Highlights**
+- **Atomic** saving (temporary file, then rename): a power cut cannot truncate the file.
+- An **invalid JSON file is never overwritten**: the program refuses to continue instead of
+  starting from an empty list and destroying the data.
+- Persistence is proven with **two separate terminals** (the first is closed before the
+  second one starts).
+- **Results:** 21 automated tests, 25 manual cases, all passing.
 
-### Captures
+### Screenshots
 
-**1. Aperçu du CSV et analyse complète**
+**1. Help and adding tasks**
 
-![Analyse complète](./projet-3-analyse-csv-ventes/screenshots/01-analyse-complete.png)
+![Add and list](./projet-2-gestionnaire-taches-cli/screenshots/01-ajout-et-liste.png)
 
-**2. Filtres, tri et top** (août, région Vaud, produits triés par quantité)
+**2. Complete, delete, filter, errors**
 
-![Filtres, tri, top](./projet-3-analyse-csv-ventes/screenshots/02-filtres-tri-top.png)
+![Complete, delete, errors](./projet-2-gestionnaire-taches-cli/screenshots/02-terminer-supprimer-erreurs.png)
 
-**3. Lignes invalides écartées** (7 rejets sur 10 lignes, avec leur raison)
+**3. Persistence, before closing** (list and JSON content of the file)
 
-![Lignes rejetées](./projet-3-analyse-csv-ventes/screenshots/03-lignes-rejetees.png)
+![Persistence before](./projet-2-gestionnaire-taches-cli/screenshots/03-persistance-avant.png)
 
-**4. Export de la synthèse**
+**4. Persistence, after restart** (new terminal: same tasks found)
 
-![Export de la synthèse](./projet-3-analyse-csv-ventes/screenshots/04-export-synthese.png)
+![Persistence after restart](./projet-2-gestionnaire-taches-cli/screenshots/04-persistance-apres-redemarrage.png)
 
-**5. Vérification croisée avec `awk`**
+**5. Corrupted file rejected and never overwritten**
 
-![Vérification croisée](./projet-3-analyse-csv-ventes/screenshots/05-verification-croisee-awk.png)
+![Corrupted file](./projet-2-gestionnaire-taches-cli/screenshots/05-fichier-corrompu.png)
 
-**6. Tests automatisés**
+**6. Automated tests**
 
-![Tests automatisés](./projet-3-analyse-csv-ventes/screenshots/06-tests-automatises.png)
+![Automated tests](./projet-2-gestionnaire-taches-cli/screenshots/06-tests-automatises.png)
 
-**Difficulté notable :** le tri alphabétique plaçait « Écran » après « Souris » (les lettres
-accentuées suivent `z` dans l'ordre des caractères). Trouvé par un test, corrigé par une clé
-de tri sans accents ni casse.
+**Notable difficulty:** the screenshots used `clear; command` on a single line, which erased
+the command line from the image. Fixed by using two separate keystrokes. Accepted limitation:
+the ID of the last deleted task is reused (documented).
 
 ---
 
-## Jour 4 — Client d'une API publique
+## Day 3 — Analysing a sales CSV file
 
-**Projet :** [`projet-4-client-api-publique/`](./projet-4-client-api-publique/) ·
-**Documentation complète :** [README](./projet-4-client-api-publique/README.md),
-[gestion des erreurs](./projet-4-client-api-publique/GESTION-ERREURS.md),
-[tests manuels](./projet-4-client-api-publique/TESTS-MANUELS.md),
-[notice](./projet-4-client-api-publique/NOTICE.md),
-[exemples de sorties](./projet-4-client-api-publique/exemples/sortie-exemples.txt)
+**Project:** [`projet-3-analyse-csv-ventes/`](./projet-3-analyse-csv-ventes/) ·
+**Full documentation:** [README](./projet-3-analyse-csv-ventes/README.md),
+[calculation method](./projet-3-analyse-csv-ventes/METHODE.md),
+[manual tests](./projet-3-analyse-csv-ventes/TESTS-MANUELS.md),
+[user guide](./projet-3-analyse-csv-ventes/NOTICE.md),
+[generated summary](./projet-3-analyse-csv-ventes/resultats/synthese.txt)
 
-Client en ligne de commande de l'API publique **Frankfurter** (taux de change de la Banque
-centrale européenne, sans clé) avec `requests` : conversion de montants, taux du jour ou
-d'un jour passé, historique d'un taux avec minimum, maximum, moyenne et variation, liste des
-devises. L'API a été choisie sans pouvoir consulter le formateur : à valider avec lui.
+Reads a CSV export of 320 sales (fictional dataset, Q3 2026, generated with a fixed seed) and
+computes statistics: revenue, average per sale, best-selling product, groupings by month,
+region, category and product, filters, sorting and export of a summary. Uses the `csv`
+module, no pandas.
 
-**Points marquants**
-- Quatre types d'erreurs distincts (saisie, réseau, réponse HTTP en échec, réponse
-  inutilisable) ; aucune trace Python n'est jamais affichée.
-- **Nouvelles tentatives sélectives** avec attente croissante : réseau, délai dépassé, 429
-  et 5xx sont rejoués ; les autres 4xx jamais.
-- Un cours demandé un week-end est **signalé** : l'API répond avec le dernier jour ouvré.
-- Tests contre un **serveur HTTP local factice** : le vrai code réseau est testé sans
-  Internet. Les cas manuels, eux, ont été joués contre la vraie API.
-- **Résultats :** 24 tests automatisés en 0,7 s, 22 cas manuels, tous conformes.
+**Highlights**
+- Amounts use `Decimal`: **exact** sums. Revenue: CHF 89'754.00.
+- An invalid row is **skipped and reported** (line number + reason) without stopping the
+  analysis.
+- **Cross-check:** the indicators are recomputed with `awk`, without the Python code;
+  identical results to the cent.
+- **Results:** 29 automated tests, 21 manual cases, all passing.
 
-### Captures
+### Screenshots
 
-Les taux affichés sont ceux du 29 octobre 2026.
+**1. CSV preview and full analysis**
 
-**1. Aide et conversions**
+![Full analysis](./projet-3-analyse-csv-ventes/screenshots/01-analyse-complete.png)
 
-![Aide et conversions](./projet-4-client-api-publique/screenshots/01-aide-et-conversions.png)
+**2. Filters, sorting and top** (August, Vaud region, products sorted by quantity)
 
-**2. Taux, et cours d'un week-end**
+![Filters, sorting, top](./projet-3-analyse-csv-ventes/screenshots/02-filtres-tri-top.png)
 
-![Taux et week-end](./projet-4-client-api-publique/screenshots/02-taux-et-week-end.png)
+**3. Invalid rows skipped** (7 rejected out of 10 rows, with their reason)
 
-**3. Historique sur un mois et liste des devises**
+![Rejected rows](./projet-3-analyse-csv-ventes/screenshots/03-lignes-rejetees.png)
 
-![Historique et devises](./projet-4-client-api-publique/screenshots/03-historique-et-devises.png)
+**4. Summary export**
 
-**4. Gestion des erreurs** (devise inconnue, saisies invalides, API injoignable avec 3 tentatives en 1,6 s)
+![Summary export](./projet-3-analyse-csv-ventes/screenshots/04-export-synthese.png)
 
-![Gestion des erreurs](./projet-4-client-api-publique/screenshots/04-gestion-des-erreurs.png)
+**5. Cross-check with `awk`**
 
-**5. Tests automatisés**
+![Cross-check](./projet-3-analyse-csv-ventes/screenshots/05-verification-croisee-awk.png)
 
-![Tests automatisés](./projet-4-client-api-publique/screenshots/05-tests-automatises.png)
+**6. Automated tests**
 
-**Difficulté notable :** `convertir 100 CHF CHF` donnait un `HTTP 422 : bad currency pair`
-peu parlant. Refusé maintenant localement avec un message clair, et couvert par un test.
+![Automated tests](./projet-3-analyse-csv-ventes/screenshots/06-tests-automatises.png)
+
+**Notable difficulty:** alphabetical sorting placed "Écran" after "Souris" (accented letters
+come after `z` in character order). Found by a test, fixed with a sort key that ignores
+accents and case.
 
 ---
 
-## Jour 5 — Mini-application testée avec pytest
+## Day 4 — Public API client
 
-**Projet :** [`projet-5-mini-application-tests-pytest/`](./projet-5-mini-application-tests-pytest/) ·
-**Documentation complète :** [README](./projet-5-mini-application-tests-pytest/README.md),
-[cas métier et règles](./projet-5-mini-application-tests-pytest/CAS-METIER.md),
-[rapport d'exécution](./projet-5-mini-application-tests-pytest/rapport/)
+**Project:** [`projet-4-client-api-publique/`](./projet-4-client-api-publique/) ·
+**Full documentation:** [README](./projet-4-client-api-publique/README.md),
+[error handling](./projet-4-client-api-publique/GESTION-ERREURS.md),
+[manual tests](./projet-4-client-api-publique/TESTS-MANUELS.md),
+[user guide](./projet-4-client-api-publique/NOTICE.md),
+[output examples](./projet-4-client-api-publique/exemples/sortie-exemples.txt)
 
-Une **mini-banque** (comptes courants avec découvert, comptes épargne avec intérêts, virements
-tout-ou-rien, relevés) et sa suite de tests pytest. Le cas métier est un choix personnel parmi
-les exemples de la fiche, à valider avec le formateur. L'argent est un `Decimal`, jamais un
+Command-line client for the public **Frankfurter** API (European Central Bank exchange rates,
+no key needed) using `requests`: amount conversion, rate of the day or of a past day, rate
+history with minimum, maximum, average and change, list of currencies. The API was chosen
+without being able to consult the instructor: to be validated with them.
+
+**Highlights**
+- Four distinct kinds of errors (input, network, failed HTTP response, unusable response); no
+  Python traceback is ever displayed.
+- **Selective retries** with increasing delay: network errors, timeouts, 429 and 5xx are
+  retried; other 4xx never.
+- A rate requested on a weekend is **flagged**: the API answers with the last business day.
+- Tests run against a **fake local HTTP server**: the real network code is tested without
+  Internet. The manual cases, on the other hand, were run against the real API.
+- **Results:** 24 automated tests in 0.7 s, 22 manual cases, all passing.
+
+### Screenshots
+
+The rates shown are those of 29 October 2026.
+
+**1. Help and conversions**
+
+![Help and conversions](./projet-4-client-api-publique/screenshots/01-aide-et-conversions.png)
+
+**2. Rates, and a weekend rate**
+
+![Rates and weekend](./projet-4-client-api-publique/screenshots/02-taux-et-week-end.png)
+
+**3. One-month history and list of currencies**
+
+![History and currencies](./projet-4-client-api-publique/screenshots/03-historique-et-devises.png)
+
+**4. Error handling** (unknown currency, invalid input, unreachable API with 3 attempts in 1.6 s)
+
+![Error handling](./projet-4-client-api-publique/screenshots/04-gestion-des-erreurs.png)
+
+**5. Automated tests**
+
+![Automated tests](./projet-4-client-api-publique/screenshots/05-tests-automatises.png)
+
+**Notable difficulty:** `convertir 100 CHF CHF` produced an unhelpful `HTTP 422: bad currency
+pair`. It is now rejected locally with a clear message, and covered by a test.
+
+---
+
+## Day 5 — Mini application tested with pytest
+
+**Project:** [`projet-5-mini-application-tests-pytest/`](./projet-5-mini-application-tests-pytest/) ·
+**Full documentation:** [README](./projet-5-mini-application-tests-pytest/README.md),
+[business case and rules](./projet-5-mini-application-tests-pytest/CAS-METIER.md),
+[execution report](./projet-5-mini-application-tests-pytest/rapport/)
+
+A **mini bank** (current accounts with overdraft, savings accounts with interest, all-or-nothing
+transfers, statements) and its pytest test suite. The business case is a personal choice among
+the examples in the brief, to be validated with the instructor. Money is a `Decimal`, never a
 `float`.
 
-**Points marquants**
-- **165 tests** (77 fonctions, paramétrées) : cas nominaux, cas limites (valeur exacte de la
-  frontière puis un centime au-delà), arrondis, entrées hostiles, atomicité des virements.
-- Couverture de **100 % des lignes et des branches**.
-- **Test de mutation** : 23 bugs introduits volontairement dans le code, 23 détectés par les
-  tests. Une couverture à 100 % dit que le code s'exécute, pas que les tests vérifient quelque
-  chose ; la mutation le contrôle.
-- **Rapport d'exécution** exporté : sortie pytest, JUnit XML, couverture, mutation.
+**Highlights**
+- **165 tests** (77 functions, parametrised): nominal cases, edge cases (exact boundary value
+  then one cent beyond), rounding, hostile input, transfer atomicity.
+- **100% line and branch** coverage.
+- **Mutation testing:** 23 bugs deliberately introduced into the code, 23 caught by the tests.
+  100% coverage only says the code runs, not that the tests check anything; mutation testing
+  verifies that.
+- Exported **execution report**: pytest output, JUnit XML, coverage, mutation.
 
-### Captures
+### Screenshots
 
-**1. Démonstration de l'application**
+**1. Application demo**
 
-![Démonstration](./projet-5-mini-application-tests-pytest/screenshots/01-demonstration.png)
+![Demo](./projet-5-mini-application-tests-pytest/screenshots/01-demonstration.png)
 
-**2. Les tests, un par ligne** (165 réussis)
+**2. The tests, one per line** (165 passed)
 
 ![pytest -v](./projet-5-mini-application-tests-pytest/screenshots/02-pytest-verbose.png)
 
-**3. Couverture des lignes et des branches** (100 %)
+**3. Line and branch coverage** (100%)
 
-![Couverture](./projet-5-mini-application-tests-pytest/screenshots/03-couverture.png)
+![Coverage](./projet-5-mini-application-tests-pytest/screenshots/03-couverture.png)
 
-**4. Un bug volontaire est détecté** (copie temporaire du code : 9 échecs)
+**4. A deliberate bug is detected** (temporary copy of the code: 9 failures)
 
-![Bug volontaire détecté](./projet-5-mini-application-tests-pytest/screenshots/04-bug-volontaire-detecte.png)
+![Deliberate bug detected](./projet-5-mini-application-tests-pytest/screenshots/04-bug-volontaire-detecte.png)
 
-**5. Test de mutation** (23 sur 23)
+**5. Mutation testing** (23 out of 23)
 
-![Test de mutation](./projet-5-mini-application-tests-pytest/screenshots/05-test-de-mutation.png)
+![Mutation testing](./projet-5-mini-application-tests-pytest/screenshots/05-test-de-mutation.png)
 
-**Difficultés notables :** la configuration de `coverage` placée au mauvais endroit faisait
-compter les fichiers de test (un « 100 % » trompeur) ; le test de mutation a révélé un
-contrôle de type **redondant** dans le code (supprimé) ; un retour en arrière du virement
-s'est avéré **inatteignable**, donc retiré.
+**Notable difficulties:** the `coverage` configuration was in the wrong place, so test files
+were counted (a misleading "100%"); mutation testing revealed a **redundant** type check in
+the code (removed); a transfer rollback turned out to be **unreachable**, so it was removed.
 
 ---
 
-## Bilan de la semaine
+## Week summary
 
-| Constat | Détail |
+| Finding | Detail |
 | --- | --- |
-| Tout est vérifié, pas seulement affirmé | chaque chiffre des tableaux vient d'une exécution réelle ; les relevés manuels notent la sortie **observée** |
-| Les tests ont trouvé de vrais défauts | tri alphabétique avec accents (jour 3), devise identique envoyée à l'API (jour 4), code redondant et code mort (jour 5) |
-| Recoupements indépendants | `awk` contre le code Python (jour 3) ; test de mutation contre la suite de tests (jour 5) |
-| Fil conducteur | séparer la logique des entrées/sorties pour pouvoir tester ; valider avant d'agir ; ne jamais écraser une donnée sur une erreur ; l'argent en `Decimal` |
+| Everything is verified, not just claimed | every figure in the tables comes from a real run; the manual records note the **observed** output |
+| Tests found real defects | alphabetical sorting with accents (day 3), identical currency sent to the API (day 4), redundant and dead code (day 5) |
+| Independent cross-checks | `awk` against the Python code (day 3); mutation testing against the test suite (day 5) |
+| Common thread | separate logic from input/output so it can be tested; validate before acting; never overwrite data on error; money as `Decimal` |
 
-**Limites à connaître**
-- Les jeux de données (jour 3) sont fictifs ; l'API (jour 4) est réelle mais les taux changent.
-- L'API du jour 4 et le cas métier du jour 5 sont à valider avec le formateur, comme le
-  demandent les fiches.
-- Les captures proviennent d'un terminal virtuel isolé, pas du bureau de la machine (voir
-  ci-dessous). Les messages d'`argparse` (options invalides) restent en anglais.
-- Tests et code ont été écrits par la même personne : une relecture croisée serait utile.
+**Limitations to be aware of**
+- The datasets (day 3) are fictional; the API (day 4) is real but the rates change.
+- The day 4 API and the day 5 business case are to be validated with the instructor, as the
+  briefs require.
+- The screenshots come from an isolated virtual terminal, not the machine's desktop (see
+  below). The `argparse` messages (invalid options) remain in English.
+- Tests and code were written by the same person: a cross-review would be useful.
 
-## Reproduire les résultats
+## Reproducing the results
 
-Pré-requis : Python 3.8 ou plus récent (testé avec 3.12.3, Linux).
+Prerequisites: Python 3.8 or newer (tested with 3.12.3, Linux).
 
 ```bash
-git clone https://github.com/bilkl/python-ppe-e3.git
+git clone https://github.com/xbkh/python-ppe-e3.git
 cd python-ppe-e3
 
-# Jours 1 à 3 : rien à installer
+# Days 1 to 3: nothing to install
 (cd projet-1-calculatrice-convertisseur && python3 -m unittest -v)
 (cd projet-2-gestionnaire-taches-cli   && python3 -m unittest -v)
 (cd projet-3-analyse-csv-ventes        && python3 -m unittest -v)
 
-# Jour 4 : requests (les tests n'ont pas besoin d'Internet)
+# Day 4: requests (the tests do not need Internet)
 (cd projet-4-client-api-publique && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt \
    && .venv/bin/python -m unittest -v)
 
-# Jour 5 : pytest et pytest-cov
+# Day 5: pytest and pytest-cov
 (cd projet-5-mini-application-tests-pytest && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt \
    && .venv/bin/pytest --cov)
 ```
 
-## Comment les captures ont été produites
+## How the screenshots were produced
 
-Chaque projet contient un script `tools/capture.sh`. Il lance un écran virtuel isolé (Xvfb)
-et un terminal (`xterm`), **tape réellement les commandes** (`xdotool`) puis capture l'écran
-(`scrot`). Les programmes tournent donc pour de vrai ; aucune capture ne montre le bureau de
-la machine. Le jour 4 interroge la vraie API : les taux changent d'une exécution à l'autre.
+Each project contains a `tools/capture.sh` script. It starts an isolated virtual screen (Xvfb)
+and a terminal (`xterm`), **actually types the commands** (`xdotool`) and then captures the
+screen (`scrot`). The programs therefore really run; no screenshot shows the machine's
+desktop. Day 4 queries the real API: the rates change from one run to the next.
